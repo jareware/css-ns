@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "test": "browserify --no-bundle-external -t [ reactify --es6 ] -t component-css-ns/browserify MyComponent.jsx"
+  }
+}

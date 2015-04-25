@@ -1,0 +1,9 @@
+.foo {
+  .bar-x {
+    .baz_y {
+      color: red;
+    }
+  }
+}
+
+@import 'SubComponent';
