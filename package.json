@@ -9,10 +9,11 @@
     "browserify": "9.0.8",
     "classnames": "1.2.1",
     "react": "0.13.2",
-    "reactify": "1.1.0"
+    "reactify": "1.1.0",
+    "mocha": "2.2.4"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/suite.js"
   },
   "author": "Jarno Rantanen <jarno@jrw.fi>",
   "license": "MIT"
