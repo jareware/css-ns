@@ -1,5 +1,5 @@
 {
   "scripts": {
-    "test": "node-sass --stdout --output-style=expanded MyComponent.scss"
+    "test": "node-sass --importer=$(pwd)/node_modules/component-css-ns/node-sass.js entrypoint.scss > /dev/null 2>&1 && cat entrypoint.css"
   }
 }
