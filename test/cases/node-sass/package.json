@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "test": "node-sass --stdout --output-style=expanded MyComponent.scss"
+  }
+}

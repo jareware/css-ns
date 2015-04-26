@@ -8,9 +8,10 @@
   "devDependencies": {
     "browserify": "9.0.8",
     "classnames": "1.2.1",
+    "mocha": "2.2.4",
+    "node-sass": "2.1.1",
     "react": "0.13.2",
-    "reactify": "1.1.0",
-    "mocha": "2.2.4"
+    "reactify": "1.1.0"
   },
   "scripts": {
     "test": "mocha test/suite.js"

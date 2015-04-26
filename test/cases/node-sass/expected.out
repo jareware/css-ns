@@ -1,0 +1,9 @@
+.MyComponent-foo .MyComponent-bar-x .MyComponent-baz_y {
+  color: red; }
+
+.MyComponent-lib-herp {
+  color: green; }
+
+.SubComponent-something {
+  color: blue; }
+
