@@ -11,6 +11,8 @@ describe('component-css-ns', function() {
 
     it(dir, function(done) {
 
+      this.timeout(15 * 1000); // builds may take a long time on slower machines; let's be lenient
+
       var path = testCasePath + dir + '/';
       var expected = fs.readFileSync(path + 'expected.out', 'utf8');
 
