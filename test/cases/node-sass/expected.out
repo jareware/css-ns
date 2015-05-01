@@ -1,3 +1,6 @@
+.pretend-sass-lib {
+  content: ''; }
+
 .MyComponent-foo .MyComponent-bar-x .MyComponent-baz_y {
   color: red; }
 
