@@ -1,3 +1,5 @@
+/* @component-css-ns */
+
 var React = require('react');
 var cx = require('classnames');
 var SubComponent = require('./SubComponent.jsx');
