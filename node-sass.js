@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var postcss = require('postcss');
 
+var OPT_IN_TRIGGER = '/* @component-css-ns */';
 var CLASSNAME_SEARCH = /\.([a-z][a-zA-Z_-]*)/g;
 
 var transform = postcss.plugin('component-css-ns', function(opts) {
@@ -23,10 +24,15 @@ module.exports = function(url, prev, done) {
     if (err) { // for whatever reason, couldn't read the source file (might exist on the --include-path for example)
       done({ file: url }); // we wouldn't want to touch it anyway -> let SASS figure it out
     } else {
-      try {
-        done({ contents: postcss([ transform({ filename: next }) ]).process(data).css });
-      } catch (e) {
-        done(e); // PostCSS transform failed
+      data = data + '';
+      if (data.indexOf(OPT_IN_TRIGGER) === -1) {
+        done({ file: url }); // let's not touch this file
+      } else {
+        try {
+          done({ contents: postcss([ transform({ filename: next }) ]).process(data).css });
+        } catch (e) {
+          done(e); // PostCSS transform failed
+        }
       }
     }
   });
