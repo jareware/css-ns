@@ -19,7 +19,7 @@ var transform = postcss.plugin('component-css-ns', function(opts) {
 // @see https://www.npmjs.com/package/node-sass#importer-v2-0-0-experimental
 module.exports = function(url, prev, done) {
   var expectedExtension = path.extname(url) === '' ? path.extname(prev) : ''; // if the import had an extension (e.g. ".scss"), use that; if not, use the extension of the importing file
-  var next = path.join(path.dirname(prev), url + expectedExtension); // construct import path relative to current file // TODO: Solve https://github.com/sass/node-sass/issues/762
+  var next = path.join(path.dirname(prev), url + expectedExtension); // construct import path relative to current file
   fs.readFile(next, function(err, data) {
     if (err) { // for whatever reason, couldn't read the source file (might exist on the --include-path for example)
       done({ file: url }); // we wouldn't want to touch it anyway -> let SASS figure it out
