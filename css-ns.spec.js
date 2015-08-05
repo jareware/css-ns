@@ -7,7 +7,7 @@ describe('css-ns', function() {
   it('works', function() {
     var A = React.createClass({
       render: function() {
-        return cssNs.nsReactTree(
+        return cssNs.nsReactTree('A',
           React.createElement('ul', null,
             React.createElement('li', { className: 'row' }),
             React.createElement('li', null,
