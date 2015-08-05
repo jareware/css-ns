@@ -1,7 +1,7 @@
 module.exports = {
 
-  nsReactTree: function() {
-    return 123;
+  nsReactTree: function(tree) {
+    return tree; // TODO
   }
 
 };
