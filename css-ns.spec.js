@@ -52,6 +52,62 @@ describe('css-ns', function() {
       assert.deepEqual(html, '<div class="MyComponent-row"><section><div class="MyComponent-column"></div></section></div>');
     });
 
+    it('respects component boundaries', function() {
+      var options = {
+        namespace: 'MyComponent'
+      };
+      var MyChildComponent = function() {
+        return React.createElement('div', { className: 'protected' });
+      };
+      var MyComponent = function() {
+        return cssNs.nsReactTree(options,
+          React.createElement('div', { className: 'container' },
+            React.createElement(MyChildComponent, null)
+          )
+        );
+      };
+      var html = ReactDOMServer.renderToStaticMarkup(React.createElement(MyComponent));
+      assert.deepEqual(html, '<div class="MyComponent-container"><div class="protected"></div></div>');
+    });
+
+    it('respects ownership of children across components', function() {
+      var options = {
+        namespace: 'MyComponent'
+      };
+      var MyChildComponent = function(props) {
+        return React.createElement('div', { className: 'protected' }, props.children);
+      };
+      var MyComponent = function() {
+        return cssNs.nsReactTree(options,
+          React.createElement(MyChildComponent, null,
+            React.createElement('div', { className: 'owned' })
+          )
+        );
+      };
+      var html = ReactDOMServer.renderToStaticMarkup(React.createElement(MyComponent));
+      assert.deepEqual(html, '<div class="protected"><div class="MyComponent-owned"></div></div>');
+    });
+
+    it('works with nested components', function() {
+      var options = {
+        namespace: 'MyComponent'
+      };
+      var MyChildComponent = function() {
+        return cssNs.nsReactTree({ namespace: 'MyChildComponent' },
+          React.createElement('div', { className: 'protected' })
+        );
+      };
+      var MyComponent = function() {
+        return cssNs.nsReactTree(options,
+          React.createElement('div', { className: 'container' },
+            React.createElement(MyChildComponent, null)
+          )
+        );
+      };
+      var html = ReactDOMServer.renderToStaticMarkup(React.createElement(MyComponent));
+      assert.deepEqual(html, '<div class="MyComponent-container"><div class="MyChildComponent-protected"></div></div>');
+    });
+
   });
 
 });
