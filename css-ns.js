@@ -18,6 +18,10 @@ function isObject(x) {
   return typeof x === 'object' && !isArray(x) && x !== null;
 }
 
+function truthy(x) {
+  return !!x;
+}
+
 function assert(truthyValue, message) {
   if (!truthyValue) throw new Error(message);
 }
@@ -36,17 +40,19 @@ function makeOptions(raw) {
 function nsClassList(options, x) {
   var opt = makeOptions(options);
   if (isString(x)) {
-    return x.replace(/\w+/g, function(className) {
-      return opt.namespace + '-' + className;
+    return x.replace(/\w+/g, function(cls) {
+      return opt.namespace + '-' + cls;
     });
   } else if (isArray(x)) {
-    return x.map(function(className) {
-      return nsClassList(opt, className);
-    }).join(' ');
+    return x.map(function(cls) {
+      return cls ? nsClassList(opt, cls) : null;
+    }).filter(truthy).join(' ');
   } else if (isObject(x)) {
-    return nsClassList(opt, Object.keys(x));
-  } else {
-    assert(false, 'nsClassList() expects a string, an array or an object, got: ' + x)
+    return nsClassList(opt, Object.keys(x).map(function(key) {
+      return x[key] ? key : null;
+    }));
+  } else { // input was either falsy or something we don't understand -> don't output anything
+    return '';
   }
 }
 

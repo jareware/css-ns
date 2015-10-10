@@ -56,6 +56,10 @@ describe('css-ns', function() {
         assert.equal(cssNs.nsClassList('Foo', 'bar baz'), 'Foo-bar Foo-baz');
       });
 
+      it('tolerates falsy values', function() {
+        assert.equal(cssNs.nsClassList('Foo'), '');
+      });
+
     });
 
     describe('array input', function() {
@@ -64,12 +68,20 @@ describe('css-ns', function() {
         assert.equal(cssNs.nsClassList('Foo', [ 'bar', 'baz' ]), 'Foo-bar Foo-baz');
       });
 
+      it('tolerates falsy values', function() {
+        assert.equal(cssNs.nsClassList('Foo', [ 'bar', null, 'baz', false ]), 'Foo-bar Foo-baz');
+      });
+
     });
 
     describe('object input', function() {
 
       it('prefixes classes', function() {
         assert.equal(cssNs.nsClassList('Foo', { bar: true, baz: true }), 'Foo-bar Foo-baz');
+      });
+
+      it('tolerates falsy values', function() {
+        assert.equal(cssNs.nsClassList('Foo', { bar: true, ignoreThis: null, baz: true, alsoThis: false }), 'Foo-bar Foo-baz');
       });
 
     });
