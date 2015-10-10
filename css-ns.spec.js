@@ -14,6 +14,20 @@ describe('css-ns', function() {
       );
     });
 
+    it('accepts a file path', function() {
+      assert.deepEqual(
+        cssNs.makeOptions('/path/to/MyComponent.jsx').namespace,
+        'MyComponent'
+      );
+    });
+
+    it('accepts a relative file path', function() {
+      assert.deepEqual(
+        cssNs.makeOptions('../MyComponent.jsx').namespace,
+        'MyComponent'
+      );
+    });
+
     it('processes options only once', function() {
       assert.deepEqual(
         cssNs.makeOptions(cssNs.makeOptions('MyComponent')).namespace,

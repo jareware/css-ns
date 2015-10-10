@@ -17,8 +17,9 @@ function makeOptions(raw) {
   if (raw._cssNsOpts) return raw; // already processed, let's skip any extra work
   if (isString(raw)) return makeOptions({ namespace: raw }); // shorthand for just specifying the namespace
   if (!isObject(raw)) throw new Error('Options must be provided either as an object or a string, got ' + raw);
+  if (!isString(raw.namespace)) throw new Error('Mandatory "namespace" option must be provided as a string');
   return {
-    namespace: raw.namespace,
+    namespace: raw.namespace.replace(/.*\/([\w-]+).*/, '$1'),
     _cssNsOpts: true
   };
 }
