@@ -44,7 +44,15 @@ describe('css-ns', function() {
 
   });
 
-  describe('React support', function() {
+  describe('nsClassList()', function() {
+
+    it('prefixes a single class', function() {
+      assert.equal(cssNs.nsClassList('Foo', 'bar'), 'Foo-bar');
+    });
+
+  });
+
+  describe('nsReactTree()', function() {
 
     function assertEqualHtml(Component, expectedHtml) {
       assert.deepEqual(
