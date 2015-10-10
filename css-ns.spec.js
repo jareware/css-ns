@@ -35,6 +35,23 @@ describe('css-ns', function() {
       assert.deepEqual(html, '<div class="MyComponent-row"><div class="MyComponent-column"></div></div>');
     });
 
+    it('allows elements without a className', function() {
+      var options = {
+        namespace: 'MyComponent'
+      };
+      var MyComponent = function() {
+        return cssNs.nsReactTree(options,
+          React.createElement('div', { className: 'row' },
+            React.createElement('section', null,
+              React.createElement('div', { className: 'column' })
+            )
+          )
+        );
+      };
+      var html = ReactDOMServer.renderToStaticMarkup(React.createElement(MyComponent));
+      assert.deepEqual(html, '<div class="MyComponent-row"><section><div class="MyComponent-column"></div></section></div>');
+    });
+
   });
 
 });
