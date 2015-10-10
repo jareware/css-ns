@@ -5,6 +5,31 @@ var ReactDOMServer = require('react-dom/server');
 
 describe('css-ns', function() {
 
+  describe('makeOptions()', function() {
+
+    it('accepts a string', function() {
+      assert.deepEqual(
+        cssNs.makeOptions('MyComponent').namespace,
+        'MyComponent'
+      );
+    });
+
+    it('processes options only once', function() {
+      assert.deepEqual(
+        cssNs.makeOptions(cssNs.makeOptions('MyComponent')).namespace,
+        'MyComponent'
+      );
+    });
+
+    it('accepts an object', function() {
+      assert.deepEqual(
+        cssNs.makeOptions({ namespace: 'MyComponent' }).namespace,
+        'MyComponent'
+      );
+    });
+
+  });
+
   describe('React support', function() {
 
     function assertEqualHtml(Component, expectedHtml) {
