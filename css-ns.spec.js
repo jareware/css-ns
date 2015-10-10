@@ -20,6 +20,21 @@ describe('css-ns', function() {
       assert.deepEqual(html, '<div class="MyComponent-row"></div>');
     });
 
+    it('prefixes classNames recursively', function() {
+      var options = {
+        namespace: 'MyComponent'
+      };
+      var MyComponent = function() {
+        return cssNs.nsReactTree(options,
+          React.createElement('div', { className: 'row' },
+            React.createElement('div', { className: 'column' })
+          )
+        );
+      };
+      var html = ReactDOMServer.renderToStaticMarkup(React.createElement(MyComponent));
+      assert.deepEqual(html, '<div class="MyComponent-row"><div class="MyComponent-column"></div></div>');
+    });
+
   });
 
 });
