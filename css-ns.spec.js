@@ -46,8 +46,32 @@ describe('css-ns', function() {
 
   describe('nsClassList()', function() {
 
-    it('prefixes a single class', function() {
-      assert.equal(cssNs.nsClassList('Foo', 'bar'), 'Foo-bar');
+    describe('string input', function() {
+
+      it('prefixes a single class', function() {
+        assert.equal(cssNs.nsClassList('Foo', 'bar'), 'Foo-bar');
+      });
+
+      it('prefixes multiple classes', function() {
+        assert.equal(cssNs.nsClassList('Foo', 'bar baz'), 'Foo-bar Foo-baz');
+      });
+
+    });
+
+    describe('array input', function() {
+
+      it('prefixes classes', function() {
+        assert.equal(cssNs.nsClassList('Foo', [ 'bar', 'baz' ]), 'Foo-bar Foo-baz');
+      });
+
+    });
+
+    describe('object input', function() {
+
+      it('prefixes classes', function() {
+        assert.equal(cssNs.nsClassList('Foo', { bar: true, baz: true }), 'Foo-bar Foo-baz');
+      });
+
     });
 
   });

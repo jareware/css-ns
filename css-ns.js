@@ -10,8 +10,12 @@ function isString(x) {
   return typeof x === 'string';
 }
 
+function isArray(x) {
+  return Array.isArray(x);
+}
+
 function isObject(x) {
-  return typeof x === 'object' && !Array.isArray(x) && x !== null;
+  return typeof x === 'object' && !isArray(x) && x !== null;
 }
 
 function assert(truthyValue, message) {
@@ -30,19 +34,27 @@ function makeOptions(raw) {
 }
 
 function nsClassList(options, x) {
-  var opts = makeOptions(options);
+  var opt = makeOptions(options);
   if (isString(x)) {
-    return opts.namespace + '-' + x;
+    return x.replace(/\w+/g, function(className) {
+      return opt.namespace + '-' + className;
+    });
+  } else if (isArray(x)) {
+    return x.map(function(className) {
+      return nsClassList(opt, className);
+    }).join(' ');
+  } else if (isObject(x)) {
+    return nsClassList(opt, Object.keys(x));
   } else {
-    assert(false, 'nsClassList() expects a string, got: ' + x)
+    assert(false, 'nsClassList() expects a string, an array or an object, got: ' + x)
   }
 }
 
 function nsReactTree(options, el) {
   assert(el === null || el === false || React.isValidElement(el), 'nsReactTree() expects a valid React element, null or false, got: ' + el);
   if (!el) return el; // see https://facebook.github.io/react/tips/false-in-jsx.html for why falsy values can be useful
-  var opts = makeOptions(options);
-  var props = el.props.className ? { className: nsClassList(opts, el.props.className) } : el.props;
-  var children = React.Children.map(el.props.children, nsReactTree.bind(null, opts));
+  var opt = makeOptions(options);
+  var props = el.props.className ? { className: nsClassList(opt, el.props.className) } : el.props;
+  var children = React.Children.map(el.props.children, nsReactTree.bind(null, opt));
   return React.cloneElement(el, props, children);
 }
