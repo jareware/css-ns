@@ -1,18 +1,13 @@
+var React = require('react');
+
 module.exports = {
   nsReactTree: nsReactTree
 };
 
-function nsReactTree(ns, node) {
+function nsReactTree(options, node) {
   if (node && node.props && node.props.className) {
-    node.props.className = ns + '-' + node.props.className;
+    return React.cloneElement(node, { className: options.namespace + '-' + node.props.className });
+  } else {
+    return node;
   }
-  var children = node.props && node.props.children;
-  if (Array.isArray(children)) {
-    children.forEach(function(childNode) {
-      nsReactTree(ns, childNode);
-    });
-  } else if (children) {
-    nsReactTree(ns, children);
-  }
-  return node;
 }

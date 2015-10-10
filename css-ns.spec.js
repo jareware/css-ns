@@ -5,21 +5,21 @@ var ReactDOMServer = require('react-dom/server');
 
 describe('css-ns', function() {
 
-  it('works', function() {
-    var A = React.createClass({
-      render: function() {
-        return cssNs.nsReactTree('A',
-          React.createElement('ul', null,
-            React.createElement('li', { className: 'row' }),
-            React.createElement('li', null,
-              React.createElement('span', { className: 'message' }, 'Hola!')
-            )
-          )
+  describe('React support', function() {
+
+    it('prefixes a single className', function() {
+      var options = {
+        namespace: 'MyComponent'
+      };
+      var MyComponent = function() {
+        return cssNs.nsReactTree(options,
+          React.createElement('div', { className: 'row' })
         );
-      }
+      };
+      var html = ReactDOMServer.renderToStaticMarkup(React.createElement(MyComponent));
+      assert.deepEqual(html, '<div class="MyComponent-row"></div>');
     });
-    var html = React.renderToStaticMarkup(React.createElement(A));
-    assert.deepEqual('<ul><li class="A-row"></li><li><span class="A-message">Hola!</span></li></ul>', html);
+
   });
 
 });
