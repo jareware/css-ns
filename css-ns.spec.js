@@ -114,6 +114,30 @@ describe('css-ns', function() {
       );
     });
 
+    it('supports array input', function() {
+      var MyComponent = function() {
+        return cssNs.nsReactTree('MyComponent',
+          React.createElement('div', { className: [ 'row' ] })
+        );
+      };
+      assertEqualHtml(
+        MyComponent,
+        '<div class="MyComponent-row"></div>'
+      );
+    });
+
+    it('supports object input', function() {
+      var MyComponent = function() {
+        return cssNs.nsReactTree('MyComponent',
+          React.createElement('div', { className: { row: true } })
+        );
+      };
+      assertEqualHtml(
+        MyComponent,
+        '<div class="MyComponent-row"></div>'
+      );
+    });
+
     it('prefixes classNames recursively', function() {
       var MyComponent = function() {
         return cssNs.nsReactTree('MyComponent',
@@ -194,6 +218,23 @@ describe('css-ns', function() {
       assertEqualHtml(
         MyComponent,
         '<div class="MyComponent-container"><div class="MyChildComponent-protected"></div></div>'
+      );
+    });
+
+    it('prefixes classNames on components as well', function() {
+      // This is a bit of an edge case, since for a component, a prop called "className" holds no special value.
+      // But if you're using a prop with that name it's highly likely this is the behaviour you want.
+      var MyChildComponent = function(props) {
+        return React.createElement('div', { className: props.className });
+      };
+      var MyComponent = function() {
+        return cssNs.nsReactTree('MyComponent',
+          React.createElement(MyChildComponent, { className: 'parentInjectedName' })
+        );
+      };
+      assertEqualHtml(
+        MyComponent,
+        '<div class="MyComponent-parentInjectedName"></div>'
       );
     });
 
