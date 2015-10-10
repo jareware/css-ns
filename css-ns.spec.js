@@ -53,6 +53,11 @@ describe('css-ns', function() {
       );
     }
 
+    it('tolerates falsy input', function() {
+      assert.equal(cssNs.nsReactTree('MyComponent', null), null);
+      assert.equal(cssNs.nsReactTree('MyComponent', false), false);
+    });
+
     it('prefixes a single className', function() {
       var MyComponent = function() {
         return cssNs.nsReactTree('MyComponent',
