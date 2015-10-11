@@ -26,22 +26,24 @@ function assert(truthyValue, message) {
   if (!truthyValue) throw new Error(message);
 }
 
-function assertRegexOpt(value, name) {
-  assert(isRegex(value), 'The "' + name + '" option must be provided as a RegExp object, got: ' + value);
+function assertOptionType(assertion, readableType, name, value) {
+  assert(assertion(value), 'The "' + name + '" option must be of type ' + readableType + ', got: ' + value);
   return value;
 }
+
+var assertRegexOption = assertOptionType.bind(null, isRegex, 'RegExp');
+var assertStringOption = assertOptionType.bind(null, isString, 'string');
 
 function makeOptions(raw) {
   if (raw._cssNsOpts) return raw; // already processed, let's skip any extra work
   if (isString(raw)) return makeOptions({ namespace: raw }); // shorthand for just specifying the namespace
   assert(isObject(raw), 'Options must be provided either as an object or a string, got: ' + raw);
-  assert(isString(raw.namespace), 'Mandatory "namespace" option must be provided as a string, got: ' + raw.namespace);
   return {
-    namespace: raw.namespace.replace(/.*\/([\w-]+).*/, '$1'),
-    include: assertRegexOpt(raw.include || /^[a-z]/, 'include'),
-    exclude: assertRegexOpt(raw.exclude || /^$/, 'exclude'),
-    self: assertRegexOpt(raw.self || /^this$/, 'self'),
-    glue: raw.glue || '-',
+    namespace:  assertStringOption( 'namespace', raw.namespace).replace(/.*\/([\w-]+).*/, '$1'),
+    include:    assertRegexOption(  'include',   raw.include || /^[a-z]/),
+    exclude:    assertRegexOption(  'exclude',   raw.exclude || /^$/),
+    self:       assertRegexOption(  'self',      raw.self    || /^this$/),
+    glue:       assertStringOption( 'glue',      raw.glue    || '-'),
     _cssNsOpts: true
   };
 }
