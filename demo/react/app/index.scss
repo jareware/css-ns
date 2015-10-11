@@ -9,11 +9,11 @@ body, html, #container {
   display: flex;
   height: 100%;
 
-  &-left {
+  > .MessagesPanel {
     width: 300px;
     margin: 20px;
   }
-  &-right {
+  > .ConversationPanel {
     flex: 1;
     margin: 20px;
     margin-left: 0;

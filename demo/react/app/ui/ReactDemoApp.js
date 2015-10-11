@@ -1,20 +1,18 @@
 import React from 'react';
 import createCssNs from 'css-ns';
 import { Panel } from 'react-bootstrap';
+import MessagesPanel from './MessagesPanel';
+import ConversationPanel from './ConversationPanel';
 
-const ns = createCssNs(__filename);
+const ns = require('../util/css-ns')(__filename);
 
-export default class ReactDemoApp extends React.Component {
+export default class extends React.Component {
 
   render() {
     return ns(
       <div className="this">
-        <Panel className="left" header="Your conversations" bsStyle="primary">
-          TODO
-        </Panel>
-        <Panel className="right">
-          TODO
-        </Panel>
+        <MessagesPanel />
+        <ConversationPanel />
       </div>
     );
   }
