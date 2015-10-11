@@ -1,11 +1,12 @@
 {
   "name": "css-ns_react-demo",
   "scripts": {
-    "start": "cp app/index.{html,css} dist && watchify -t babelify app/index.js --debug -v -o dist/index.js"
+    "start": "cp app/index.html dist && node-sass app/index.scss --watch --output dist & watchify -t babelify app/index.js --debug -v -o dist/index.js"
   },
   "dependencies": {
     "babelify": "^6.3.0",
     "browserify": "^11.2.0",
+    "node-sass": "^3.3.3",
     "react": "^0.14.0",
     "react-bootstrap": "^0.27.1",
     "react-dom": "^0.14.0",
