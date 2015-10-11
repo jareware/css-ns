@@ -41,6 +41,7 @@ function makeOptions(raw) {
     include: assertRegexOpt(raw.include || /^[a-z]/, 'include'),
     exclude: assertRegexOpt(raw.exclude || /^$/, 'exclude'),
     self: assertRegexOpt(raw.self || /^this$/, 'self'),
+    glue: raw.glue || '-',
     _cssNsOpts: true
   };
 }
@@ -67,7 +68,7 @@ function nsClassList(options, x) {
       if (cls.match(opt.self))
         return opt.namespace;
       else if (cls.match(opt.include) && !cls.match(opt.exclude))
-        return opt.namespace + '-' + cls;
+        return opt.namespace + opt.glue + cls;
       else
         return cls;
     }).join(' ').trim();

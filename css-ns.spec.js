@@ -138,6 +138,14 @@ describe('css-ns', function() {
         assert.equal(cssNs.nsClassList(options, '__ns__ bar'), 'Foo Foo-bar');
       });
 
+      it('supports a glue option', function() {
+        var options = {
+          namespace: 'Foo',
+          glue: '___'
+        };
+        assert.equal(cssNs.nsClassList(options, 'bar'), 'Foo___bar');
+      });
+
     });
 
     describe('array input', function() {
