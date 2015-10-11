@@ -1,4 +1,4 @@
-# component-css-ns
+# css-ns
 
 [![Build Status](https://travis-ci.org/jareware/component-css-ns.svg?branch=master)](https://travis-ci.org/jareware/component-css-ns)
 [![Dependency Status](https://david-dm.org/jareware/component-css-ns.svg)](https://david-dm.org/jareware/component-css-ns)
