@@ -1,13 +1,14 @@
 {
   "name": "css-ns_react-demo",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "cp app/index.html dist && watchify -t babelify app/index.js --debug -v -o dist/index.js"
   },
   "dependencies": {
     "babelify": "^6.3.0",
     "browserify": "^11.2.0",
     "react": "^0.14.0",
     "react-bootstrap": "^0.27.1",
-    "react-dom": "^0.14.0"
+    "react-dom": "^0.14.0",
+    "watchify": "^3.4.0"
   }
 }
