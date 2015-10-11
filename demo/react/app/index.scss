@@ -1,0 +1,21 @@
+body, html, #container {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.ReactDemoApp {
+  display: flex;
+  height: 100%;
+
+  &-left {
+    width: 300px;
+    margin: 20px;
+  }
+  &-right {
+    flex: 1;
+    margin: 20px;
+    margin-left: 0;
+  }
+}
