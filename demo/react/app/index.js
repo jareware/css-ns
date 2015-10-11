@@ -1,3 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactDemoApp from './ui/ReactDemoApp';
 
-console.info('Hello World!');
+ReactDOM.render(<ReactDemoApp />, document.querySelector('#container'));
