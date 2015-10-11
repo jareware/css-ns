@@ -71,8 +71,7 @@ function nsClassList(options, x) {
 }
 
 function nsReactElement(options, el) {
-  assert(el === null || el === false || React.isValidElement(el), 'nsReactElement() expects a valid React element, null or false, got: ' + el);
-  if (!el) return el; // see https://facebook.github.io/react/tips/false-in-jsx.html for why falsy values can be useful
+  assert(React.isValidElement(el), 'nsReactElement() expects a valid React element, got: ' + el);
   var opt = makeOptions(options);
   var props = el.props.className ? { className: nsClassList(opt, el.props.className) } : el.props;
   var children = React.Children.map(el.props.children, nsReactElement.bind(null, opt));

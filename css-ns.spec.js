@@ -144,11 +144,6 @@ describe('css-ns', function() {
       );
     }
 
-    it('tolerates falsy input', function() {
-      assert.equal(cssNs.nsReactElement('MyComponent', null), null);
-      assert.equal(cssNs.nsReactElement('MyComponent', false), false);
-    });
-
     it('prefixes a single className', function() {
       var MyComponent = function() {
         return cssNs.nsReactElement('MyComponent',
