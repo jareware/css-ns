@@ -3,6 +3,13 @@ var cssNs = require('./css-ns');
 var React = require('react');
 var ReactDOMServer = require('react-dom/server');
 
+function assertEqualHtml(Component, expectedHtml) {
+  assert.deepEqual(
+    ReactDOMServer.renderToStaticMarkup(React.createElement(Component)),
+    expectedHtml
+  );
+}
+
 describe('css-ns', function() {
 
   describe('makeOptions()', function() {
@@ -39,6 +46,30 @@ describe('css-ns', function() {
       assert.deepEqual(
         cssNs.makeOptions({ namespace: 'MyComponent' }).namespace,
         'MyComponent'
+      );
+    });
+
+  });
+
+  describe('nsAuto()', function() {
+
+    it('handles falsy input', function() {
+      assert.equal(cssNs.nsAuto('MyComponent', null), null);
+    });
+
+    it('handles class list input', function() {
+      assert.equal(cssNs.nsAuto('Foo', 'bar'), 'Foo-bar');
+    });
+
+    it('handles React element input', function() {
+      var MyComponent = function() {
+        return cssNs.nsAuto('MyComponent',
+          React.createElement('div', { className: 'row' })
+        );
+      };
+      assertEqualHtml(
+        MyComponent,
+        '<div class="MyComponent-row"></div>'
       );
     });
 
@@ -136,13 +167,6 @@ describe('css-ns', function() {
   });
 
   describe('nsReactElement()', function() {
-
-    function assertEqualHtml(Component, expectedHtml) {
-      assert.deepEqual(
-        ReactDOMServer.renderToStaticMarkup(React.createElement(Component)),
-        expectedHtml
-      );
-    }
 
     it('prefixes a single className', function() {
       var MyComponent = function() {

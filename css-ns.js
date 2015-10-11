@@ -1,10 +1,10 @@
 var React = require('react');
 
-module.exports = {
-  makeOptions: makeOptions,
-  nsClassList: nsClassList,
-  nsReactElement: nsReactElement
-};
+module.exports = createCssNs;
+module.exports.makeOptions = makeOptions;
+module.exports.nsAuto = nsAuto;
+module.exports.nsClassList = nsClassList;
+module.exports.nsReactElement = nsReactElement;
 
 function isString(x) {
   return typeof x === 'string';
@@ -45,6 +45,21 @@ function makeOptions(raw) {
   };
 }
 
+function createCssNs(options) {
+  var opt = makeOptions(options);
+  return nsAuto.bind(null, opt);
+}
+
+function nsAuto(options, x) {
+  var opt = makeOptions(options);
+  if (!x) // see https://facebook.github.io/react/tips/false-in-jsx.html for why falsy values can be useful
+    return null;
+  else if (React.isValidElement(x))
+    return nsReactElement(opt, x);
+  else
+    return nsClassList(opt, x);
+}
+
 function nsClassList(options, x) {
   var opt = makeOptions(options);
   if (isString(x)) {
@@ -65,7 +80,7 @@ function nsClassList(options, x) {
     return nsClassList(opt, Object.keys(x).map(function(key) {
       return x[key] ? key : null;
     }));
-  } else { // input was either falsy or something we don't understand -> don't output anything
+  } else { // input was either falsy or something we don't understand -> treat it as an empty class list
     return '';
   }
 }
