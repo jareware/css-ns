@@ -60,6 +60,11 @@ describe('css-ns', function() {
         assert.equal(cssNs.nsClassList('Foo'), '');
       });
 
+      it('tolerates exotic classNames and whitespace', function() {
+        // ...not that using these would be a good idea for other reasons, but we won't judge!
+        assert.equal(cssNs.nsClassList('Foo', '   bar-baz   lol{wtf$why%would__ANYONE"do.this}   '), 'Foo-bar-baz Foo-lol{wtf$why%would__ANYONE"do.this}');
+      });
+
       it('supports an include option', function() {
         var options = {
           namespace: 'Foo',

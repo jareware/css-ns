@@ -42,13 +42,13 @@ function makeOptions(raw) {
 function nsClassList(options, x) {
   var opt = makeOptions(options);
   if (isString(x)) {
-    return x.replace(/\w+/g, function(cls) {
+    return x.split(/\s+/).map(function(cls) {
       if (cls.match(opt.include) && !cls.match(opt.exclude)) {
         return opt.namespace + '-' + cls;
       } else {
         return cls;
       }
-    });
+    }).join(' ').trim();
   } else if (isArray(x)) {
     return x.map(function(cls) {
       return cls ? nsClassList(opt, cls) : null;
