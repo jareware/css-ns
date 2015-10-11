@@ -3,7 +3,7 @@ var React = require('react');
 module.exports = {
   makeOptions: makeOptions,
   nsClassList: nsClassList,
-  nsReactTree: nsReactTree
+  nsReactElement: nsReactElement
 };
 
 function isString(x) {
@@ -70,11 +70,11 @@ function nsClassList(options, x) {
   }
 }
 
-function nsReactTree(options, el) {
-  assert(el === null || el === false || React.isValidElement(el), 'nsReactTree() expects a valid React element, null or false, got: ' + el);
+function nsReactElement(options, el) {
+  assert(el === null || el === false || React.isValidElement(el), 'nsReactElement() expects a valid React element, null or false, got: ' + el);
   if (!el) return el; // see https://facebook.github.io/react/tips/false-in-jsx.html for why falsy values can be useful
   var opt = makeOptions(options);
   var props = el.props.className ? { className: nsClassList(opt, el.props.className) } : el.props;
-  var children = React.Children.map(el.props.children, nsReactTree.bind(null, opt));
+  var children = React.Children.map(el.props.children, nsReactElement.bind(null, opt));
   return React.cloneElement(el, props, children);
 }
