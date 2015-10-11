@@ -22,10 +22,6 @@ function isRegex(x) {
   return x instanceof RegExp;
 }
 
-function truthy(x) {
-  return !!x;
-}
-
 function assert(truthyValue, message) {
   if (!truthyValue) throw new Error(message);
 }
@@ -53,18 +49,18 @@ function nsClassList(options, x) {
   var opt = makeOptions(options);
   if (isString(x)) {
     return x.split(/\s+/).map(function(cls) {
-      if (cls.match(opt.self)) {
+      if (cls.match(opt.self))
         return opt.namespace;
-      } else if (cls.match(opt.include) && !cls.match(opt.exclude)) {
+      else if (cls.match(opt.include) && !cls.match(opt.exclude))
         return opt.namespace + '-' + cls;
-      } else {
+      else
         return cls;
-      }
     }).join(' ').trim();
   } else if (isArray(x)) {
-    return x.map(function(cls) {
-      return cls ? nsClassList(opt, cls) : null;
-    }).filter(truthy).join(' ');
+    return x
+      .map(nsClassList.bind(null, opt))
+      .filter(function(x) { return !!x })
+      .join(' ');
   } else if (isObject(x)) {
     return nsClassList(opt, Object.keys(x).map(function(key) {
       return x[key] ? key : null;
