@@ -60,6 +60,40 @@ describe('css-ns', function() {
         assert.equal(cssNs.nsClassList('Foo'), '');
       });
 
+      it('supports an include option', function() {
+        var options = {
+          namespace: 'Foo',
+          include: /^b/ // only prefix classes that start with b
+        };
+        assert.equal(
+          cssNs.nsClassList(options, 'bar AnotherComponent car'),
+          'Foo-bar AnotherComponent car'
+        );
+      });
+
+      it('supports an exclude option', function() {
+        var options = {
+          namespace: 'Foo',
+          exclude: /^([A-Z]|icon)/ // ignore classes that start with caps or "icon"
+        };
+        assert.equal(
+          cssNs.nsClassList(options, 'bar AnotherComponent iconInfo baz'),
+          'Foo-bar AnotherComponent iconInfo Foo-baz'
+        );
+      });
+
+      it('supports both include and exclude at the same time', function() {
+        var options = {
+          namespace: 'Foo',
+          include: /^[a-z]/, // include classes that start with lower-case
+          exclude: /^icon/ // ...but still ignore the "icon" prefix
+        };
+        assert.equal(
+          cssNs.nsClassList(options, 'bar iconInfo baz'),
+          'Foo-bar iconInfo Foo-baz'
+        );
+      });
+
     });
 
     describe('array input', function() {

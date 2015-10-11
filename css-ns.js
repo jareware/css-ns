@@ -33,6 +33,8 @@ function makeOptions(raw) {
   assert(isString(raw.namespace), 'Mandatory "namespace" option must be provided as a string, got: ' + raw.namespace);
   return {
     namespace: raw.namespace.replace(/.*\/([\w-]+).*/, '$1'),
+    include: raw.include || /^[a-z]/,
+    exclude: raw.exclude || /^$/,
     _cssNsOpts: true
   };
 }
@@ -41,7 +43,11 @@ function nsClassList(options, x) {
   var opt = makeOptions(options);
   if (isString(x)) {
     return x.replace(/\w+/g, function(cls) {
-      return opt.namespace + '-' + cls;
+      if (cls.match(opt.include) && !cls.match(opt.exclude)) {
+        return opt.namespace + '-' + cls;
+      } else {
+        return cls;
+      }
     });
   } else if (isArray(x)) {
     return x.map(function(cls) {
