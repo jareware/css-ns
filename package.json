@@ -2,6 +2,7 @@
   "name": "css-ns",
   "version": "0.0.1",
   "description": "",
+  "main": "css-ns.js",
   "dependencies": {},
   "devDependencies": {
     "chai": "3.3.0",
