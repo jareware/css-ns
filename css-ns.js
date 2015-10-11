@@ -1,7 +1,7 @@
 var React = require('react');
 
 module.exports = createCssNs;
-module.exports.makeOptions = makeOptions;
+module.exports.createOptions = createOptions;
 module.exports.nsAuto = nsAuto;
 module.exports.nsClassList = nsClassList;
 module.exports.nsReactElement = nsReactElement;
@@ -34,9 +34,9 @@ function assertOptionType(assertion, readableType, name, value) {
 var assertRegexOption = assertOptionType.bind(null, isRegex, 'RegExp');
 var assertStringOption = assertOptionType.bind(null, isString, 'string');
 
-function makeOptions(raw) {
+function createOptions(raw) {
   if (raw._cssNsOpts) return raw; // already processed, let's skip any extra work
-  if (isString(raw)) return makeOptions({ namespace: raw }); // shorthand for just specifying the namespace
+  if (isString(raw)) return createOptions({ namespace: raw }); // shorthand for just specifying the namespace
   assert(isObject(raw), 'Options must be provided either as an object or a string, got: ' + raw);
   return {
     namespace:  assertStringOption( 'namespace', raw.namespace).replace(/.*\/([\w-]+).*/, '$1'),
@@ -49,12 +49,12 @@ function makeOptions(raw) {
 }
 
 function createCssNs(options) {
-  var opt = makeOptions(options);
+  var opt = createOptions(options);
   return nsAuto.bind(null, opt);
 }
 
 function nsAuto(options, x) {
-  var opt = makeOptions(options);
+  var opt = createOptions(options);
   if (!x) // see https://facebook.github.io/react/tips/false-in-jsx.html for why falsy values can be useful
     return null;
   else if (React.isValidElement(x))
@@ -64,7 +64,7 @@ function nsAuto(options, x) {
 }
 
 function nsClassList(options, x) {
-  var opt = makeOptions(options);
+  var opt = createOptions(options);
   if (isString(x)) {
     return x.split(/\s+/).map(function(cls) {
       if (cls.match(opt.self))
@@ -90,7 +90,7 @@ function nsClassList(options, x) {
 
 function nsReactElement(options, el) {
   assert(React.isValidElement(el), 'nsReactElement() expects a valid React element, got: ' + el);
-  var opt = makeOptions(options);
+  var opt = createOptions(options);
   var props = el.props.className ? { className: nsClassList(opt, el.props.className) } : el.props;
   var children = React.Children.map(el.props.children, nsReactElement.bind(null, opt));
   return React.cloneElement(el, props, children);

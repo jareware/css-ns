@@ -12,39 +12,39 @@ function assertEqualHtml(Component, expectedHtml) {
 
 describe('css-ns', function() {
 
-  describe('makeOptions()', function() {
+  describe('createOptions()', function() {
 
     it('accepts a string', function() {
       assert.deepEqual(
-        cssNs.makeOptions('MyComponent').namespace,
+        cssNs.createOptions('MyComponent').namespace,
         'MyComponent'
       );
     });
 
     it('accepts a file path', function() {
       assert.deepEqual(
-        cssNs.makeOptions('/path/to/MyComponent.jsx').namespace,
+        cssNs.createOptions('/path/to/MyComponent.jsx').namespace,
         'MyComponent'
       );
     });
 
     it('accepts a relative file path', function() {
       assert.deepEqual(
-        cssNs.makeOptions('../MyComponent.jsx').namespace,
+        cssNs.createOptions('../MyComponent.jsx').namespace,
         'MyComponent'
       );
     });
 
     it('processes options only once', function() {
       assert.deepEqual(
-        cssNs.makeOptions(cssNs.makeOptions('MyComponent')).namespace,
+        cssNs.createOptions(cssNs.createOptions('MyComponent')).namespace,
         'MyComponent'
       );
     });
 
     it('accepts an object', function() {
       assert.deepEqual(
-        cssNs.makeOptions({ namespace: 'MyComponent' }).namespace,
+        cssNs.createOptions({ namespace: 'MyComponent' }).namespace,
         'MyComponent'
       );
     });
