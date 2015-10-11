@@ -188,6 +188,18 @@ describe('css-ns', function() {
       );
     });
 
+    it('ignores text nodes', function() {
+      var MyComponent = function() {
+        return cssNs.nsReactElement('MyComponent',
+          React.createElement('div', { className: 'row' }, 'Hello World')
+        );
+      };
+      assertEqualHtml(
+        MyComponent,
+        '<div class="MyComponent-row">Hello World</div>'
+      );
+    });
+
     it('supports array input', function() {
       var MyComponent = function() {
         return cssNs.nsReactElement('MyComponent',

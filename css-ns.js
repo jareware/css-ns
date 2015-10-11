@@ -89,6 +89,7 @@ function nsClassList(options, x) {
 }
 
 function nsReactElement(options, el) {
+  if (isString(el)) return el; // we're mapping a text node -> leave it be
   assert(React.isValidElement(el), 'nsReactElement() expects a valid React element, got: ' + el);
   var opt = createOptions(options);
   var props = el.props.className ? { className: nsClassList(opt, el.props.className) } : el.props;
