@@ -99,6 +99,14 @@ describe('css-ns', function() {
         );
       });
 
+      it('supports a self option', function() {
+        var options = {
+          namespace: 'Foo',
+          self: /^__ns__$/
+        };
+        assert.equal(cssNs.nsClassList(options, '__ns__ bar'), 'Foo Foo-bar');
+      });
+
     });
 
     describe('array input', function() {

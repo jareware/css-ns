@@ -18,12 +18,21 @@ function isObject(x) {
   return typeof x === 'object' && !isArray(x) && x !== null;
 }
 
+function isRegex(x) {
+  return x instanceof RegExp;
+}
+
 function truthy(x) {
   return !!x;
 }
 
 function assert(truthyValue, message) {
   if (!truthyValue) throw new Error(message);
+}
+
+function assertRegexOpt(value, name) {
+  assert(isRegex(value), 'The "' + name + '" option must be provided as a RegExp object, got: ' + value);
+  return value;
 }
 
 function makeOptions(raw) {
@@ -33,8 +42,9 @@ function makeOptions(raw) {
   assert(isString(raw.namespace), 'Mandatory "namespace" option must be provided as a string, got: ' + raw.namespace);
   return {
     namespace: raw.namespace.replace(/.*\/([\w-]+).*/, '$1'),
-    include: raw.include || /^[a-z]/,
-    exclude: raw.exclude || /^$/,
+    include: assertRegexOpt(raw.include || /^[a-z]/, 'include'),
+    exclude: assertRegexOpt(raw.exclude || /^$/, 'exclude'),
+    self: assertRegexOpt(raw.self || /^this$/, 'self'),
     _cssNsOpts: true
   };
 }
@@ -43,7 +53,9 @@ function nsClassList(options, x) {
   var opt = makeOptions(options);
   if (isString(x)) {
     return x.split(/\s+/).map(function(cls) {
-      if (cls.match(opt.include) && !cls.match(opt.exclude)) {
+      if (cls.match(opt.self)) {
+        return opt.namespace;
+      } else if (cls.match(opt.include) && !cls.match(opt.exclude)) {
         return opt.namespace + '-' + cls;
       } else {
         return cls;
