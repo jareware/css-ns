@@ -1,7 +1,0 @@
-{
-  "scripts": {
-    "test": "npm run build && cat temp.js && echo && echo && npm run render",
-    "build": "browserify --standalone temp --no-bundle-external -t [ reactify --es6 ] -t component-css-ns/browserify MyComponent.jsx > temp.js",
-    "render": "node render.js"
-  }
-}

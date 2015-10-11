@@ -1,5 +1,0 @@
-{
-  "scripts": {
-    "test": "cat entrypoint.scss | node-sass --importer=$(pwd)/node_modules/component-css-ns/node-sass --include-path=$(pwd)/node_modules"
-  }
-}

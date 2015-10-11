@@ -1,5 +1,0 @@
-{
-  "scripts": {
-    "test": "cd deep/path/hierarchy && node ../../../test.js"
-  }
-}
