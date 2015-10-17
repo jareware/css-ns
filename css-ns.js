@@ -5,6 +5,7 @@ module.exports.createOptions = createOptions;
 module.exports.nsAuto = nsAuto;
 module.exports.nsString = nsString;
 module.exports.nsArray = nsArray;
+module.exports.nsObject = nsObject;
 module.exports.nsClassList = nsClassList;
 module.exports.nsReactElement = nsReactElement;
 
@@ -87,6 +88,14 @@ function nsArray(options, array) {
     .join(' ');
 }
 
+function nsObject(options, object) {
+  assert(isObject(object), 'nsObject() expects object input, got: ' + object);
+  var opt = createOptions(options);
+  return nsArray(opt, Object.keys(object).map(function(key) {
+    return object[key] ? key : null;
+  }));
+}
+
 function nsClassList(options, x) {
   var opt = createOptions(options);
   if (isString(x)) { // TODO: DEPRECATED
@@ -103,7 +112,7 @@ function nsClassList(options, x) {
       .map(nsClassList.bind(null, opt))
       .filter(function(x) { return !!x })
       .join(' ');
-  } else if (isObject(x)) {
+  } else if (isObject(x)) { // TODO: DEPRECATED
     return nsClassList(opt, Object.keys(x).map(function(key) {
       return x[key] ? key : null;
     }));
