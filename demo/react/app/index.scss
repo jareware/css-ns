@@ -62,3 +62,24 @@ $horPadding: 15px;
     text-overflow: ellipsis;
   }
 }
+
+$verPadding: 15px;
+$horPadding: 50px;
+
+.ConversationPanel {
+  overflow: auto;
+
+  &-message {
+    background: #F6F6F6;
+    margin-bottom: $verPadding;
+    padding: 8px 12px;
+    margin-right: $horPadding;
+  }
+
+  &-mine {
+    text-align: right;
+    background: rgba(51, 122, 183, 0.25);
+    margin-left: $horPadding;
+    margin-right: 0;
+  }
+}
