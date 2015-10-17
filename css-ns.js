@@ -6,7 +6,6 @@ module.exports.nsAuto = nsAuto;
 module.exports.nsString = nsString;
 module.exports.nsArray = nsArray;
 module.exports.nsObject = nsObject;
-module.exports.nsClassList = nsClassList;
 module.exports.nsReactElement = nsReactElement;
 
 function isString(x) {
@@ -58,12 +57,16 @@ function createCssNs(options) {
 
 function nsAuto(options, x) {
   var opt = createOptions(options);
-  if (!x) // see https://facebook.github.io/react/tips/false-in-jsx.html for why falsy values can be useful
-    return null;
-  else if (React.isValidElement(x))
+  if (React.isValidElement(x))
     return nsReactElement(opt, x);
-  else
-    return nsClassList(opt, x);
+  else if (isString(x))
+    return nsString(opt, x);
+  else if (isArray(x))
+    return nsArray(opt, x);
+  else if (isObject(x))
+    return nsObject(opt, x);
+  else // input was something we don't understand -> pass it through
+    return x;
 }
 
 function nsString(options, string) {
@@ -96,36 +99,11 @@ function nsObject(options, object) {
   }));
 }
 
-function nsClassList(options, x) {
-  var opt = createOptions(options);
-  if (isString(x)) { // TODO: DEPRECATED
-    return x.split(/\s+/).map(function(cls) {
-      if (cls.match(opt.self))
-        return opt.namespace;
-      else if (cls.match(opt.include) && !cls.match(opt.exclude))
-        return opt.namespace + opt.glue + cls;
-      else
-        return cls;
-    }).join(' ').trim();
-  } else if (isArray(x)) { // TODO: DEPRECATED
-    return x
-      .map(nsClassList.bind(null, opt))
-      .filter(function(x) { return !!x })
-      .join(' ');
-  } else if (isObject(x)) { // TODO: DEPRECATED
-    return nsClassList(opt, Object.keys(x).map(function(key) {
-      return x[key] ? key : null;
-    }));
-  } else { // input was either falsy or something we don't understand -> treat it as an empty class list
-    return '';
-  }
-}
-
 function nsReactElement(options, el) {
   if (isString(el)) return el; // we're mapping a text node -> leave it be
   assert(React.isValidElement(el), 'nsReactElement() expects a valid React element, got: ' + el);
   var opt = createOptions(options);
-  var props = el.props.className ? { className: nsClassList(opt, el.props.className) } : el.props;
+  var props = el.props.className ? { className: nsAuto(opt, el.props.className) } : el.props;
   var children = React.Children.map(el.props.children, nsReactElement.bind(null, opt));
   return React.cloneElement(el, props, children);
 }
