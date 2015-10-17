@@ -1,5 +1,21 @@
-export function getRandomColors() { // a 100, courtesy of http://llllll.li/randomColor/
-  return [
+const SCALE_FACTOR = 1;
+
+function scale(scaleFactor, inputArray) {
+  return new Array(scaleFactor + 1)
+    .join(' ')
+    .split('')
+    .map(() => inputArray)
+    .reduce((prev, next) => prev.concat(next), []);
+}
+
+function shuffle(inputArray) {
+  return []
+    .concat(inputArray)
+    .sort(() => 0.5 - Math.random());
+}
+
+export function getRandomColors() {
+  return shuffle(scale(SCALE_FACTOR, [ // a 100, courtesy of http://llllll.li/randomColor/
     '#7467c6',
     '#dc5ef2',
     '#7d02db',
@@ -100,11 +116,11 @@ export function getRandomColors() { // a 100, courtesy of http://llllll.li/rando
     '#c64b21',
     '#ca7ff9',
     '#6f2faf'
-  ];
+  ]));
 }
 
-export function getRandomNames() { // a 100, courtesy of http://random-name-generator.info/random/?n=100&g=1&st=2
-  return [
+export function getRandomNames() {
+  return shuffle(scale(SCALE_FACTOR, [ // a 100, courtesy of http://random-name-generator.info/random/?n=100&g=1&st=2
     'Marianne Salazar',
     'Alex Hernandez',
     'Angela Park',
@@ -205,11 +221,11 @@ export function getRandomNames() { // a 100, courtesy of http://random-name-gene
     'Tina Roy',
     'Nichole Owens',
     'Rudolph Gonzales'
-  ];
+  ]));
 }
 
-export function getRandomMessages() { // a 100, courtesy of http://randomtextgenerator.com/
-  return [
+export function getRandomMessages() {
+  return shuffle(scale(SCALE_FACTOR, [ // a 100, courtesy of http://randomtextgenerator.com/
     'Had repulsive dashwoods suspicion sincerity but advantage now him',
     'Remark easily garret nor nay',
     'Civil those mrs enjoy shy fat merry',
@@ -310,5 +326,5 @@ export function getRandomMessages() { // a 100, courtesy of http://randomtextgen
     'He feelings removing informed he as ignorant we prepared',
     'Evening do forming observe spirits is in',
     'Country hearted be of justice sending'
-  ];
+  ]));
 }
