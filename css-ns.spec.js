@@ -142,19 +142,19 @@ describe('css-ns', function() {
 
   });
 
-  describe('nsClassList()', function() {
+  describe('nsArray()', function() {
 
-    describe('array input', function() {
-
-      it('prefixes classes', function() {
-        assert.equal(cssNs.nsClassList('Foo', [ 'bar', 'baz' ]), 'Foo-bar Foo-baz');
-      });
-
-      it('tolerates falsy values', function() {
-        assert.equal(cssNs.nsClassList('Foo', [ 'bar', null, 'baz', false ]), 'Foo-bar Foo-baz');
-      });
-
+    it('prefixes classes', function() {
+      assert.equal(cssNs.nsArray('Foo', [ 'bar', 'baz' ]), 'Foo-bar Foo-baz');
     });
+
+    it('tolerates falsy values', function() {
+      assert.equal(cssNs.nsArray('Foo', [ 'bar', null, 'baz', false ]), 'Foo-bar Foo-baz');
+    });
+
+  });
+
+  describe('nsClassList()', function() {
 
     describe('object input', function() {
 

@@ -4,6 +4,7 @@ module.exports = createCssNs;
 module.exports.createOptions = createOptions;
 module.exports.nsAuto = nsAuto;
 module.exports.nsString = nsString;
+module.exports.nsArray = nsArray;
 module.exports.nsClassList = nsClassList;
 module.exports.nsReactElement = nsReactElement;
 
@@ -77,6 +78,15 @@ function nsString(options, string) {
   }).join(' ').trim();
 }
 
+function nsArray(options, array) {
+  assert(isArray(array), 'nsArray() expects array input, got: ' + array);
+  var opt = createOptions(options);
+  return array
+    .filter(function(x) { return !!x })
+    .map(nsString.bind(null, opt))
+    .join(' ');
+}
+
 function nsClassList(options, x) {
   var opt = createOptions(options);
   if (isString(x)) { // TODO: DEPRECATED
@@ -88,7 +98,7 @@ function nsClassList(options, x) {
       else
         return cls;
     }).join(' ').trim();
-  } else if (isArray(x)) {
+  } else if (isArray(x)) { // TODO: DEPRECATED
     return x
       .map(nsClassList.bind(null, opt))
       .filter(function(x) { return !!x })
