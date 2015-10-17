@@ -19,3 +19,46 @@ body, html, #container {
     margin-left: 0;
   }
 }
+
+$verPadding: 15px;
+$horPadding: 15px;
+
+.ThreadListPanel {
+  overflow: auto;
+
+  &-thread {
+    padding: 0 0 $verPadding 0;
+    margin: 0 0 $verPadding 0;
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+  }
+
+  &-badge {
+    width: 40px;
+    height: 40px;
+    margin-right: $horPadding;
+    border-radius: 100%;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+    font-size: 23px;
+    padding-top: 4px;
+    font-weight: 100;
+  }
+
+  &-details {
+    flex: 1;
+    color: #676767;
+  }
+
+  &-name {
+    font-weight: bold;
+  }
+
+  &-message {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
