@@ -4,7 +4,7 @@ import { getRandomNames, getRandomMessages, getRandomColors } from '../util/data
 
 const ns = require('../util/css-ns')(__filename);
 
-export default class extends React.Component {
+export default class ThreadListPanel extends React.Component {
 
   render() {
     const names = getRandomNames();

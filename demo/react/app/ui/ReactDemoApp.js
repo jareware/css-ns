@@ -6,7 +6,7 @@ import ConversationPanel from './ConversationPanel';
 
 const ns = require('../util/css-ns')(__filename);
 
-export default class extends React.Component {
+export default class ReactDemoApp extends React.Component {
 
   render() {
     return ns(

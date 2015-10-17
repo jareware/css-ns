@@ -4,7 +4,7 @@ import { getRandomMessages } from '../util/data';
 
 const ns = require('../util/css-ns')(__filename);
 
-export default class extends React.Component {
+export default class ConversationPanel extends React.Component {
 
   render() {
     return ns(

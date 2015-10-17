@@ -8,6 +8,7 @@
     "browserify": "^11.2.0",
     "node-sass": "^3.3.3",
     "react": "^0.14.0",
+    "react-addons-perf": "^0.14.0",
     "react-bootstrap": "^0.27.1",
     "react-dom": "^0.14.0",
     "watchify": "^3.4.0"
