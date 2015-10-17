@@ -3,6 +3,7 @@ var React = require('react');
 module.exports = createCssNs;
 module.exports.createOptions = createOptions;
 module.exports.nsAuto = nsAuto;
+module.exports.nsString = nsString;
 module.exports.nsClassList = nsClassList;
 module.exports.nsReactElement = nsReactElement;
 
@@ -63,9 +64,22 @@ function nsAuto(options, x) {
     return nsClassList(opt, x);
 }
 
+function nsString(options, string) {
+  assert(isString(string), 'nsString() expects string input, got: ' + string);
+  var opt = createOptions(options);
+  return string.split(/\s+/).map(function(cls) {
+    if (cls.match(opt.self))
+      return opt.namespace;
+    else if (cls.match(opt.include) && !cls.match(opt.exclude))
+      return opt.namespace + opt.glue + cls;
+    else
+      return cls;
+  }).join(' ').trim();
+}
+
 function nsClassList(options, x) {
   var opt = createOptions(options);
-  if (isString(x)) {
+  if (isString(x)) { // TODO: DEPRECATED
     return x.split(/\s+/).map(function(cls) {
       if (cls.match(opt.self))
         return opt.namespace;

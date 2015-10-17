@@ -75,78 +75,74 @@ describe('css-ns', function() {
 
   });
 
-  describe('nsClassList()', function() {
+  describe('nsString()', function() {
 
-    describe('string input', function() {
-
-      it('prefixes a single class', function() {
-        assert.equal(cssNs.nsClassList('Foo', 'bar'), 'Foo-bar');
-      });
-
-      it('prefixes multiple classes', function() {
-        assert.equal(cssNs.nsClassList('Foo', 'bar baz'), 'Foo-bar Foo-baz');
-      });
-
-      it('tolerates falsy values', function() {
-        assert.equal(cssNs.nsClassList('Foo'), '');
-      });
-
-      it('tolerates exotic classNames and whitespace', function() {
-        // ...not that using these would be a good idea for other reasons, but we won't judge!
-        assert.equal(cssNs.nsClassList('Foo', '   bar-baz   lol{wtf$why%would__ANYONE"do.this}   '), 'Foo-bar-baz Foo-lol{wtf$why%would__ANYONE"do.this}');
-      });
-
-      it('supports an include option', function() {
-        var options = {
-          namespace: 'Foo',
-          include: /^b/ // only prefix classes that start with b
-        };
-        assert.equal(
-          cssNs.nsClassList(options, 'bar AnotherComponent car'),
-          'Foo-bar AnotherComponent car'
-        );
-      });
-
-      it('supports an exclude option', function() {
-        var options = {
-          namespace: 'Foo',
-          exclude: /^([A-Z]|icon)/ // ignore classes that start with caps or "icon"
-        };
-        assert.equal(
-          cssNs.nsClassList(options, 'bar AnotherComponent iconInfo baz'),
-          'Foo-bar AnotherComponent iconInfo Foo-baz'
-        );
-      });
-
-      it('supports both include and exclude at the same time', function() {
-        var options = {
-          namespace: 'Foo',
-          include: /^[a-z]/, // include classes that start with lower-case
-          exclude: /^icon/ // ...but still ignore the "icon" prefix
-        };
-        assert.equal(
-          cssNs.nsClassList(options, 'bar iconInfo baz'),
-          'Foo-bar iconInfo Foo-baz'
-        );
-      });
-
-      it('supports a self option', function() {
-        var options = {
-          namespace: 'Foo',
-          self: /^__ns__$/
-        };
-        assert.equal(cssNs.nsClassList(options, '__ns__ bar'), 'Foo Foo-bar');
-      });
-
-      it('supports a glue option', function() {
-        var options = {
-          namespace: 'Foo',
-          glue: '___'
-        };
-        assert.equal(cssNs.nsClassList(options, 'bar'), 'Foo___bar');
-      });
-
+    it('prefixes a single class', function() {
+      assert.equal(cssNs.nsString('Foo', 'bar'), 'Foo-bar');
     });
+
+    it('prefixes multiple classes', function() {
+      assert.equal(cssNs.nsString('Foo', 'bar baz'), 'Foo-bar Foo-baz');
+    });
+
+    it('tolerates exotic classNames and whitespace', function() {
+      // ...not that using these would be a good idea for other reasons, but we won't judge!
+      assert.equal(cssNs.nsString('Foo', '   bar-baz   lol{wtf$why%would__ANYONE"do.this}   '), 'Foo-bar-baz Foo-lol{wtf$why%would__ANYONE"do.this}');
+    });
+
+    it('supports an include option', function() {
+      var options = {
+        namespace: 'Foo',
+        include: /^b/ // only prefix classes that start with b
+      };
+      assert.equal(
+        cssNs.nsString(options, 'bar AnotherComponent car'),
+        'Foo-bar AnotherComponent car'
+      );
+    });
+
+    it('supports an exclude option', function() {
+      var options = {
+        namespace: 'Foo',
+        exclude: /^([A-Z]|icon)/ // ignore classes that start with caps or "icon"
+      };
+      assert.equal(
+        cssNs.nsString(options, 'bar AnotherComponent iconInfo baz'),
+        'Foo-bar AnotherComponent iconInfo Foo-baz'
+      );
+    });
+
+    it('supports both include and exclude at the same time', function() {
+      var options = {
+        namespace: 'Foo',
+        include: /^[a-z]/, // include classes that start with lower-case
+        exclude: /^icon/ // ...but still ignore the "icon" prefix
+      };
+      assert.equal(
+        cssNs.nsString(options, 'bar iconInfo baz'),
+        'Foo-bar iconInfo Foo-baz'
+      );
+    });
+
+    it('supports a self option', function() {
+      var options = {
+        namespace: 'Foo',
+        self: /^__ns__$/
+      };
+      assert.equal(cssNs.nsString(options, '__ns__ bar'), 'Foo Foo-bar');
+    });
+
+    it('supports a glue option', function() {
+      var options = {
+        namespace: 'Foo',
+        glue: '___'
+      };
+      assert.equal(cssNs.nsString(options, 'bar'), 'Foo___bar');
+    });
+
+  });
+
+  describe('nsClassList()', function() {
 
     describe('array input', function() {
 
