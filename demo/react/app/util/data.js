@@ -1,4 +1,4 @@
-const SCALE_FACTOR = 1;
+const SCALE_FACTOR = 10;
 
 function scale(scaleFactor, inputArray) {
   return new Array(scaleFactor + 1)
