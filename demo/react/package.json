@@ -5,6 +5,7 @@
     "build": "cp app/index.html dist && node-sass app/index.scss         --output dist && NODE_ENV=production browserify -t babelify app/index.js | uglifyjs --compress --mangle > dist/index.js 2> /dev/null"
   },
   "dependencies": {
+    "babel-plugin-react-class-display-name": "^0.1.0",
     "babelify": "^6.3.0",
     "browserify": "^11.2.0",
     "node-sass": "^3.3.3",
