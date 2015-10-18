@@ -9,8 +9,8 @@ const ns = require('../util/css-ns')(__filename);
 export default class ReactDemoApp extends React.Component {
 
   render() {
-    return ns(
-      <div className="this">
+    return (
+      <div className={ns('this')}>
         <ThreadListPanel />
         <ConversationPanel />
       </div>
