@@ -7,8 +7,8 @@ const ns = require('../util/css-ns')(__filename);
 class SingleMessage extends React.Component {
 
   render() {
-    return (
-      <div className={ns({ message: true, mine: Math.random() > 0.5 })}>
+    return ns(
+      <div className={{ message: true, mine: Math.random() > 0.5 }}>
         {this.props.message}
       </div>
     );
@@ -19,8 +19,8 @@ class SingleMessage extends React.Component {
 export default class ConversationPanel extends React.Component {
 
   render() {
-    return (
-      <Panel className={ns('this')}>
+    return ns(
+      <Panel className="this">
         {getRandomMessages().map((message, index) => (
           <SingleMessage key={index} message={message} />
         ))}
