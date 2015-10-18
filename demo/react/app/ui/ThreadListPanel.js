@@ -30,6 +30,7 @@ class SingleThread extends React.Component {
         <div className="details">
           <div className="name">{this.props.name}</div>
           <div className="message">{messages[this.props.index]}</div>
+          <div /><div /><div /><div /><div />{/* this cruft is here just to increase (non-namespaced) node count for perf tests */}
         </div>
       </div>
     );
