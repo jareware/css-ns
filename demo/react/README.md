@@ -13,7 +13,7 @@ At the time of writing (or committing).
 
 ## Runtime performance notes
 
-At the time of writing (or committing). In Chrome, with `SCALE_FACTOR = 10`. Application reloaded multiple times, and an "average" run was selected. Component render times are "exclusive render times" as reported by React's perf tools. This test run entails about 13,000 namespaced React elements (counted as the number of actual clones made by `nsReactElement()`). [See here about "manual namespacing"](1fb5e43a).
+At the time of writing (or committing). In Chrome, with `SCALE_FACTOR = 10`. Application reloaded multiple times, and an "average" run was selected. Component render times are "exclusive render times" as reported by React's perf tools. This test run entails about 13,000 namespaced React elements (counted as the number of actual clones made by `nsReactElement()`). [See here about "manual namespacing"](1fb5e43aa2553a7ff5e05dfc7db152c0ac497671).
 
 | Setup | SingleMessage | SingleThread | Total |
 |:---|---:|---:|---:|
