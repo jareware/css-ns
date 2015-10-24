@@ -1,0 +1,12 @@
+{
+  "name": "css-ns_vanilla-demo",
+  "scripts": {
+    "start": "cp app/index.html dist && watchify app/index.js --debug -v -o dist/index.js",
+    "build": "cp app/index.html dist && NODE_ENV=production browserify app/index.js | uglifyjs --compress --mangle > dist/index.js 2> /dev/null"
+  },
+  "dependencies": {
+    "browserify": "^11.2.0",
+    "uglify-js": "^2.5.0",
+    "watchify": "^3.4.0"
+  }
+}
