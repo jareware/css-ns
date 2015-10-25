@@ -63,7 +63,8 @@ describe('css-ns', function() {
 
     it('handles React element input', function() {
       var MyComponent = function() {
-        return cssNs.nsAuto('MyComponent',
+        return cssNs.nsAuto(
+          { namespace: 'MyComponent', React: React },
           React.createElement('div', { className: 'row' })
         );
       };
@@ -168,9 +169,14 @@ describe('css-ns', function() {
 
   describe('nsReactElement()', function() {
 
+    var nsReactElement = cssNs.nsReactElement.bind(null, { // bind default options
+      namespace: 'MyComponent',
+      React: React
+    });
+
     it('prefixes a single className', function() {
       var MyComponent = function() {
-        return cssNs.nsReactElement('MyComponent',
+        return nsReactElement(
           React.createElement('div', { className: 'row' })
         );
       };
@@ -182,7 +188,7 @@ describe('css-ns', function() {
 
     it('ignores text nodes', function() {
       var MyComponent = function() {
-        return cssNs.nsReactElement('MyComponent',
+        return nsReactElement(
           React.createElement('div', { className: 'row' }, 'Hello World')
         );
       };
@@ -194,7 +200,7 @@ describe('css-ns', function() {
 
     it('supports array input', function() {
       var MyComponent = function() {
-        return cssNs.nsReactElement('MyComponent',
+        return nsReactElement(
           React.createElement('div', { className: [ 'row' ] })
         );
       };
@@ -206,7 +212,7 @@ describe('css-ns', function() {
 
     it('supports object input', function() {
       var MyComponent = function() {
-        return cssNs.nsReactElement('MyComponent',
+        return nsReactElement(
           React.createElement('div', { className: { row: true } })
         );
       };
@@ -218,7 +224,7 @@ describe('css-ns', function() {
 
     it('prefixes classNames recursively', function() {
       var MyComponent = function() {
-        return cssNs.nsReactElement('MyComponent',
+        return nsReactElement(
           React.createElement('div', { className: 'row' },
             React.createElement('div', { className: 'column' })
           )
@@ -232,7 +238,7 @@ describe('css-ns', function() {
 
     it('allows elements without a className', function() {
       var MyComponent = function() {
-        return cssNs.nsReactElement('MyComponent',
+        return nsReactElement(
           React.createElement('div', { className: 'row' },
             React.createElement('section', null,
               React.createElement('div', { className: 'column' })
@@ -251,7 +257,7 @@ describe('css-ns', function() {
         return React.createElement('div', { className: 'protected' });
       };
       var MyComponent = function() {
-        return cssNs.nsReactElement('MyComponent',
+        return nsReactElement(
           React.createElement('div', { className: 'container' },
             React.createElement(MyChildComponent, null)
           )
@@ -268,7 +274,7 @@ describe('css-ns', function() {
         return React.createElement('div', { className: 'protected' }, props.children);
       };
       var MyComponent = function() {
-        return cssNs.nsReactElement('MyComponent',
+        return nsReactElement(
           React.createElement(MyChildComponent, null,
             React.createElement('div', { className: 'owned' })
           )
@@ -282,12 +288,13 @@ describe('css-ns', function() {
 
     it('works with nested components', function() {
       var MyChildComponent = function() {
-        return cssNs.nsReactElement('MyChildComponent',
+        return cssNs.nsReactElement(
+          { namespace: 'MyChildComponent', React: React },
           React.createElement('div', { className: 'protected' })
         );
       };
       var MyComponent = function() {
-        return cssNs.nsReactElement('MyComponent',
+        return nsReactElement(
           React.createElement('div', { className: 'container' },
             React.createElement(MyChildComponent, null)
           )
@@ -306,7 +313,7 @@ describe('css-ns', function() {
         return React.createElement('div', { className: props.className });
       };
       var MyComponent = function() {
-        return cssNs.nsReactElement('MyComponent',
+        return nsReactElement(
           React.createElement(MyChildComponent, { className: 'parentInjectedName' })
         );
       };

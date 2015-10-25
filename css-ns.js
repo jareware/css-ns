@@ -1,5 +1,3 @@
-var React;
-
 module.exports = createCssNs;
 module.exports.createOptions = createOptions;
 module.exports.nsAuto = nsAuto;
@@ -24,15 +22,8 @@ function isRegex(x) {
   return x instanceof RegExp;
 }
 
-function isReactElement(x) {
-  if (!React && React !== false) { // React has neither been included NOR ruled out yet
-    try {
-      React = require('react');
-    } catch (e) {
-      React = false; // React's not available today
-    }
-  }
-  return React && React.isValidElement(x);
+function isReactElement(opt, x) {
+  return opt.React && opt.React.isValidElement(x);
 }
 
 function assert(truthyValue, message) {
@@ -46,6 +37,7 @@ function assertOptionType(assertion, readableType, name, value) {
 
 var assertRegexOption = assertOptionType.bind(null, isRegex, 'RegExp');
 var assertStringOption = assertOptionType.bind(null, isString, 'string');
+var assertObjectOption = assertOptionType.bind(null, isObject, 'object');
 
 function createOptions(raw) {
   if (raw._cssNsOpts) return raw; // already processed, let's skip any extra work
@@ -57,6 +49,7 @@ function createOptions(raw) {
     exclude:    assertRegexOption(  'exclude',   raw.exclude || /^$/),
     self:       assertRegexOption(  'self',      raw.self    || /^this$/),
     glue:       assertStringOption( 'glue',      raw.glue    || '-'),
+    React:      raw.React && assertObjectOption('React', raw.React) || null,
     _cssNsOpts: true
   };
 }
@@ -68,7 +61,7 @@ function createCssNs(options) {
 
 function nsAuto(options, x) {
   var opt = createOptions(options);
-  if (isReactElement(x))
+  if (isReactElement(opt, x))
     return nsReactElement(opt, x);
   else if (isString(x))
     return nsString(opt, x);
@@ -112,9 +105,9 @@ function nsObject(options, object) {
 
 function nsReactElement(options, el) {
   if (isString(el)) return el; // we're mapping a text node -> leave it be
-  assert(isReactElement(el), 'nsReactElement() expects a valid React element, got: ' + el);
   var opt = createOptions(options);
+  assert(isReactElement(opt, el), 'nsReactElement() expects a valid React element, got: ' + el);
   var props = el.props.className ? { className: nsAuto(opt, el.props.className) } : el.props;
-  var children = React.Children.map(el.props.children, nsReactElement.bind(null, opt));
-  return React.cloneElement(el, props, children);
+  var children = opt.React.Children.map(el.props.children, nsReactElement.bind(null, opt));
+  return opt.React.cloneElement(el, props, children);
 }
