@@ -1,5 +1,7 @@
 module.exports = createCssNs;
+module.exports.createCssNs = createCssNs;
 module.exports.createOptions = createOptions;
+module.exports.createReact = createReact;
 module.exports.nsAuto = nsAuto;
 module.exports.nsString = nsString;
 module.exports.nsArray = nsArray;
@@ -56,7 +58,23 @@ function createOptions(raw) {
 
 function createCssNs(options) {
   var opt = createOptions(options);
-  return nsAuto.bind(null, opt);
+  var ns = nsAuto.bind(null, opt);
+  if (opt.React) ns.React = createReact(opt);
+  return ns;
+}
+
+function createReact(options) {
+  var opt = createOptions(options);
+  assert(opt.React, 'React support must be explicitly enabled by providing the "React" option');
+  var ns = nsAuto.bind(null, opt); // TODO: Reduce duplication between this and createCssNs()..?
+  return Object.create(opt.React, { // inherit everything from standard React
+    createElement: { // ...except hijack createElement()
+      value: function(_, props) {
+        if (props) props.className = ns(props.className);
+        return opt.React.createElement.apply(opt.React, arguments);
+      }
+    }
+  });
 }
 
 function nsAuto(options, x) {

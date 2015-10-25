@@ -167,6 +167,38 @@ describe('css-ns', function() {
 
   });
 
+  describe('createReact()', function() {
+
+    it('creates an ns-bound React instance', function() {
+      var nsReact = cssNs.createReact({ namespace: 'MyComponent', React: React });
+      var MyComponent = function() {
+        return nsReact.createElement('div', { className: 'row' });
+      };
+      assertEqualHtml(
+        MyComponent,
+        '<div class="MyComponent-row"></div>'
+      );
+    });
+
+    it('prefixes classNames on components as well', function() {
+      // This is a bit of an edge case, since for a component, a prop called "className" holds no special value.
+      // But if you're using a prop with that name it's highly likely this is the behaviour you want.
+      var nsReact = cssNs.createReact({ namespace: 'MyComponent', React: React });
+      var MyChildComponent = function(props) {
+        return nsReact.createElement('div', { className: props.className });
+        // ^ this won't get double-namespaced, but only because we ignore uppercased classes by default; otherwise it would
+      };
+      var MyComponent = function() {
+        return nsReact.createElement(MyChildComponent, { className: 'parentInjectedName' })
+      };
+      assertEqualHtml(
+        MyComponent,
+        '<div class="MyComponent-parentInjectedName"></div>'
+      );
+    });
+
+  });
+
   describe('nsReactElement()', function() {
 
     var nsReactElement = cssNs.nsReactElement.bind(null, { // bind default options
@@ -276,7 +308,7 @@ describe('css-ns', function() {
       var MyComponent = function() {
         return nsReactElement(
           React.createElement(MyChildComponent, null,
-            React.createElement('div', { className: 'owned' })
+            React.createElement('div', { className: 'owned' }) // it doesn't matter that "owned" is a child of MyChildComponent, it's still OWNED by MyComponent
           )
         );
       };
