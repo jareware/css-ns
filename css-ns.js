@@ -1,4 +1,4 @@
-var React = require('react');
+var React;
 
 module.exports = createCssNs;
 module.exports.createOptions = createOptions;
@@ -22,6 +22,17 @@ function isObject(x) {
 
 function isRegex(x) {
   return x instanceof RegExp;
+}
+
+function isReactElement(x) {
+  if (!React && React !== false) { // React has neither been included NOR ruled out yet
+    try {
+      React = require('react');
+    } catch (e) {
+      React = false; // React's not available today
+    }
+  }
+  return React && React.isValidElement(x);
 }
 
 function assert(truthyValue, message) {
@@ -57,7 +68,7 @@ function createCssNs(options) {
 
 function nsAuto(options, x) {
   var opt = createOptions(options);
-  if (React.isValidElement(x))
+  if (isReactElement(x))
     return nsReactElement(opt, x);
   else if (isString(x))
     return nsString(opt, x);
@@ -65,7 +76,7 @@ function nsAuto(options, x) {
     return nsArray(opt, x);
   else if (isObject(x))
     return nsObject(opt, x);
-  else // input was something we don't understand -> pass it through
+  else // input was something we don't understand (e.g. a falsy value) -> pass it through
     return x;
 }
 
@@ -101,7 +112,7 @@ function nsObject(options, object) {
 
 function nsReactElement(options, el) {
   if (isString(el)) return el; // we're mapping a text node -> leave it be
-  assert(React.isValidElement(el), 'nsReactElement() expects a valid React element, got: ' + el);
+  assert(isReactElement(el), 'nsReactElement() expects a valid React element, got: ' + el);
   var opt = createOptions(options);
   var props = el.props.className ? { className: nsAuto(opt, el.props.className) } : el.props;
   var children = React.Children.map(el.props.children, nsReactElement.bind(null, opt));

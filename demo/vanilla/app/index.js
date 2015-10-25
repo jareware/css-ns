@@ -1,3 +1,5 @@
+var createCssNs = require('css-ns');
+
 function range(count) {
   return new Array(count + 1).join(' ').split('');
 }
@@ -6,12 +8,14 @@ var p = el.bind(null, 'p');
 var ul = el.bind(null, 'ul');
 var li = el.bind(null, 'li');
 
+var ns = createCssNs('MyApp');
+
 document.body.appendChild(
   p('Here\'s a nice list of random numbers:',
     ul(
       range(25).map(function() {
         var i = Math.round(Math.random() * 10);
-        return li({ 'class': (i % 2) ? 'odd' : 'even' }, i);
+        return li({ 'class': ns(i % 2 ? 'odd' : 'even') }, i);
       })
     )
   )
