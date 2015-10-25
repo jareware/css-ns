@@ -1,8 +1,7 @@
-import React from 'react';
 import { Panel } from 'react-bootstrap';
 import { getRandomNames, getRandomMessages, getRandomColors } from '../util/data';
 
-const ns = require('../util/css-ns')(__filename);
+const { React } = require('../util/css-ns')(__filename);
 
 const names = getRandomNames();
 const messages = getRandomMessages();
@@ -24,7 +23,7 @@ const SingleThread = props => ns(
 class SingleThread extends React.Component {
 
   render() {
-    return ns(
+    return (
       <div className="thread">
         <div className="badge" style={{ background: colors[this.props.index] }}>{this.props.name.substr(0, 1)}</div>
         <div className="details">
@@ -41,7 +40,7 @@ class SingleThread extends React.Component {
 export default class ThreadListPanel extends React.Component {
 
   render() {
-    return ns(
+    return (
       <Panel className="this" header="Your conversations" bsStyle="primary">
         {names.map((name, index) => (
           <SingleThread key={index} index={index} name={name} />

@@ -1,6 +1,8 @@
 import createCssNs from 'css-ns';
+import React from 'react';
 
-export default filename => createCssNs({
-  namespace: filename,
-  exclude: /^material-icons$/
+export default namespace => createCssNs({
+  namespace,
+  React,
+  exclude: /^material-icons/
 });

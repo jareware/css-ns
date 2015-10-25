@@ -1,13 +1,12 @@
-import React from 'react';
 import { Panel } from 'react-bootstrap';
 import { getRandomMessages } from '../util/data';
 
-const ns = require('../util/css-ns')(__filename);
+const { React } = require('../util/css-ns')(__filename);
 
 class SingleMessage extends React.Component {
 
   render() {
-    return ns(
+    return (
       <div className={{ message: true, mine: Math.random() > 0.5 }}>
         {this.props.message}
       </div>
@@ -19,7 +18,7 @@ class SingleMessage extends React.Component {
 export default class ConversationPanel extends React.Component {
 
   render() {
-    return ns(
+    return (
       <Panel className="this">
         {getRandomMessages().map((message, index) => (
           <SingleMessage key={index} message={message} />
