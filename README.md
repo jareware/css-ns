@@ -40,7 +40,7 @@ ns({ foo: true, unwanted: false, bar: true }); // => "MyComponent-foo MyComponen
 ```jsx
 // Instead of importing React directly, let's import a
 // wrapped version that's bound to the current namespace:
-const { React } = require('../util/css-ns')(__filename);
+const { React } = require('./utils/css-ns')(__filename);
 
 // All className props within this file are automatically fed through css-ns. There's really no
 // magic here; keep in mind <div /> is just JSX sugar for React.createElement("div", {});
@@ -78,6 +78,65 @@ If we were to style this component using Sass, the styles could be:
 You'll note there's little need for constantly repeating the `MyComponent` prefix. This makes it hard to accidentally forget the prefix, thus causing a style leak. 
 
 ## Getting started
+
+Install with:
+
+```
+$ npm install --save css-ns
+```
+
+Then, create a namespace function:
+
+```js
+var ns = require('css-ns')('MyComponent');
+```
+
+Where possible, it's recommended to use `__filename` as the namespace, as it ensures the name of the UI component file always matches its namespace. For convenience, the file path and suffix are ignored, so that if the filename is `/path/to/MyComponent.js`, the resulting namespace will still be `MyComponent`.
+
+The `createCssNs()` factory takes either a string or an options object as its only argument:
+
+```js
+var createCssNs = require('css-ns');
+
+// This shorthand syntax...
+var ns = createCssNs(__filename);
+
+// ...is equivalent to this options object:
+var ns = createCssNs({
+  namespace: __filename
+});
+```
+
+See [full API docs](#api) for other available options.
+
+## Configuration
+
+The simple `require('css-ns')(__filename)` one-liner might very well be enough for some projects. If you need to set some options, however, it might become tedious to repeat them in every file where you need a namespace function. Having an `.*rc`-style configuration file would tie `css-ns` to environments with a file system (browsers don't have one), so to create a configuration file, just use whatever module system you're already using. Let's say we're using ES6:
+
+```js
+import createCssNs from 'css-ns';
+
+export default namespace => createCssNs({
+  namespace,
+  exclude: /^fa-/ // exclude Font Awesome classes, as they have their own "fa-" namespace
+});
+```
+
+The above contents could go to e.g. `utils/css-ns.js`, or wherever your other utilities live. Then, wherever you wish to create a local namespace:
+
+```js
+import createCssNs from './utils/css-ns';
+
+const ns = createCssNs(__filename);
+```
+
+Or, in the more compact CommonJS form:
+
+```js
+var ns = require('./utils/css-ns')(__filename);
+```
+
+There's also a [complete demo app](demo/react) configured this way.
 
 ## API
 
