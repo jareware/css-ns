@@ -1,0 +1,9 @@
+{
+  "name": "css-ns_stylus-demo",
+  "scripts": {
+    "start": "stylus input.styl -o output.css"
+  },
+  "dependencies": {
+    "stylus": "^0.53.0"
+  }
+}
