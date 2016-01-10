@@ -46,13 +46,13 @@ function createOptions(raw) {
   if (isString(raw)) return createOptions({ namespace: raw }); // shorthand for just specifying the namespace
   assert(isObject(raw), 'Options must be provided either as an object or a string, got: ' + raw);
   return {
-    namespace:  assertStringOption( 'namespace', raw.namespace).replace(/.*\/([\w-]+).*/, '$1'),
-    include:    assertRegexOption(  'include',   raw.include || /^[a-z]/),
-    exclude:    assertRegexOption(  'exclude',   raw.exclude || /^$/),
-    self:       assertRegexOption(  'self',      raw.self    || /^this$/),
-    glue:       assertStringOption( 'glue',      raw.glue    || '-'),
-    React:      raw.React && assertObjectOption('React', raw.React) || null,
-    _cssNsOpts: true
+    namespace:  assertStringOption( 'namespace', raw.namespace).replace(/.*\/([\w-]+).*/, '$1'),  // e.g. "/path/to/MyComponent.js" becomes "MyComponent"
+    include:    assertRegexOption(  'include',   raw.include || /^[a-z]/),                        // assume upper-cased classes are other components
+    exclude:    assertRegexOption(  'exclude',   raw.exclude || /^$/),                            // don't exclude anything by default (this regex will never match anything of relevance)
+    self:       assertRegexOption(  'self',      raw.self    || /^this$/),                        // "this" references the current component directly
+    glue:       assertStringOption( 'glue',      raw.glue    || '-'),                             // allows e.g. "MyComponent_foo" when set to "_"
+    React:      raw.React && assertObjectOption('React', raw.React) || null,                      // passing in a React instance enables the React convenience methods
+    _cssNsOpts: true                                                                              // simple flag signaling that options are already processed
   };
 }
 
