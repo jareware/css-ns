@@ -1,0 +1,9 @@
+{
+  "name": "css-ns_less-demo",
+  "scripts": {
+    "start": "lessc input.less output.css"
+  },
+  "dependencies": {
+    "less": "^2.5.3"
+  }
+}
