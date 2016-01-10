@@ -59,14 +59,14 @@ function createOptions(raw) {
 function createCssNs(options) {
   var opt = createOptions(options);
   var ns = nsAuto.bind(null, opt);
-  if (opt.React) ns.React = createReact(opt);
+  if (opt.React) ns.React = createReact(opt, ns);
   return ns;
 }
 
-function createReact(options) {
+function createReact(options, ns) {
   var opt = createOptions(options);
+  ns = ns || nsAuto.bind(null, opt); // avoid creating another bound version of nsAuto() if our caller already provided one
   assert(opt.React, 'React support must be explicitly enabled by providing the "React" option');
-  var ns = nsAuto.bind(null, opt); // TODO: Reduce duplication between this and createCssNs()..?
   return Object.create(opt.React, { // inherit everything from standard React
     createElement: { // ...except hijack createElement()
       value: function(_, props) {
