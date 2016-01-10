@@ -1,0 +1,11 @@
+{
+  "name": "css-ns_postcss-demo",
+  "scripts": {
+    "start": "postcss --use postcss-nested --output output.css input.css"
+  },
+  "dependencies": {
+    "postcss": "^5.0.14",
+    "postcss-cli": "^2.3.3",
+    "postcss-nested": "^1.0.0"
+  }
+}
