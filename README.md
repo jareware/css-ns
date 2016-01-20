@@ -75,12 +75,12 @@ This component produces the following DOM when rendered with truthy `props.isAct
 To ensure you won't accidentally forget to wrap a `className` with `ns()`, you can use the optional [React integration](#use-with-react). Here we also use [`__filename`](https://nodejs.org/api/globals.html#globals_filename) (supported by node, Browserify, webpack and others) to make sure our namespace always matches the file that contains it:
 
 ```jsx
-// Instead of requiring React directly, let's import a
+// Instead of requiring React directly, let's require a
 // wrapped version that's bound to the current namespace:
-var { React } = require('./utils/css-ns')(__filename);
+var { React } = require('./config/css-ns')(__filename);
 
 // All className props within this file are automatically fed through css-ns. There's really no
-// magic here; keep in mind <div /> is just JSX sugar for React.createElement("div", {});
+// magic here; keep in mind <div /> is just JSX sugar for React.createElement('div', {});
 module.exports = (props) => (
   <div className="this">
     <button className={{ submit: true, isActive: props.isActive }} />
@@ -88,7 +88,7 @@ module.exports = (props) => (
 );
 ```
 
-You'll note we also `require('./utils/css-ns')`; this is explained thoroughly in [Configuration](#configuration).
+You'll note we also `require('./config/css-ns')`; this is explained thoroughly in [Configuration](#configuration).
 
 Finally, if we were to style this component [using Sass](#use-with-sass), those styles could be:
 
@@ -113,7 +113,7 @@ The `&` reference is a [Sass built-in](http://sass-lang.com/documentation/file.S
 The simple `require('css-ns')(__filename)` one-liner might very well be enough for some projects. If you need to set some options, however, it might become tedious to repeat them in every file. Having an `.*rc`-style configuration file would tie `css-ns` to environments with a file system (browsers don't have one), so to create a configuration file, just use whatever module system you're already using. Let's say we're using ES6:
 
 ```js
-// e.g. utils/css-ns.js
+// e.g. config/css-ns.js
 
 import createCssNs from 'css-ns';
 
@@ -126,7 +126,7 @@ export default namespace => createCssNs({
 Then, to create a local namespace with the `exclude` option set:
 
 ```js
-import createCssNs from './utils/css-ns'; // instead of the global 'css-ns'
+import createCssNs from './config/css-ns'; // instead of the global 'css-ns'
 
 const ns = createCssNs(__filename);
 ```
@@ -134,7 +134,7 @@ const ns = createCssNs(__filename);
 Or, in the more compact CommonJS form:
 
 ```js
-var ns = require('./utils/css-ns')(__filename);
+var ns = require('./config/css-ns')(__filename);
 ```
 
 There's also a [complete demo app](demo/react) configured this way.
@@ -159,14 +159,58 @@ All available options are:
 
 | Option      | Type   | Default    | Description
 |-------------|--------|------------|------------
-| `namespace` | string | (none)     | TODO
-| `include`   | regex  | `/^[a-z]/` | TODO
-| `exclude`   | regex  | `/^$/`     | TODO
-| `self`      | regex  | `/^this$/` | TODO
-| `glue`      | string | `"-"`      | TODO
-| `React`     | object | (none)     | TODO
+| `namespace` | string | (none)     | Mandatory base part for the namespace, e.g. `"MyComponent"` or `__filename`. For convenience, a possible file path and suffix are ignored, so that if the provided value is `"/path/to/MyComponent.js"`, the resulting namespace will still be `"MyComponent"`.
+| `include`   | regex  | `/^[a-z]/` | Only class names matching this regex are namespaced. By default, only ones starting in lower-case are. This works out nicely with upper-cased `namespace` values: it ensures only one namespace can be applied to a class name, and calling `ns()` multiple times has the same effect as calling it once.
+| `exclude`   | regex  | `/^$/`     | Class names matching this regex are not namespaced. By default, nothing is excluded (since `/^$/` won't ever match a class name). When both `include` and `exclude` match, `exclude` wins.
+| `self`      | regex  | `/^this$/` | Class names matching this regex are replaced with the name of the namespace itself. This allows you to e.g. mark the root of your UI component without any suffixes, just the component name.
+| `glue`      | string | `"-"`      | This string is used to combine the namespace and the class name.
+| `React`     | object | (none)     | Providing this option enables React integration. When provided, must be an instance of React, e.g. `{ react: require('react') }`. See [Use with React](#use-with-react) for details.
 
 ## Use with React
+
+By default, `css-ns` doesn't use or depend on React in any way. This ensures bundlers don't get confused in projects that don't need the React integration. To enable React integration, provide the [`React` option](#api) for `createCssNs()`:
+
+```js
+// e.g. config/css-ns.js
+
+import createCssNs from 'css-ns';
+import React from 'react';
+
+export default namespace => createCssNs({
+  namespace,
+  React
+});
+```
+
+### Wrapped React instance
+
+Providing the `React` option will expose a wrapped React instance on resulting namespace functions:
+
+```js
+var ns = require('./config/css-ns')('MyComponent');
+
+ns.React.createElement('div', { className: 'foo' }); // => <div class="MyComponent-foo">
+```
+
+Because JSX just sugar for `React.createElement()` calls, this allows you to:
+
+```jsx
+var { React } = require('./config/css-ns')('MyComponent');
+
+<div className="foo">; // => <div class="MyComponent-foo">
+```
+
+The wrapping is in fact [extremely thin](https://github.com/jareware/css-ns/blob/b62b5d4aef6d8c43707622da2fa63eeb601bdb66/css-ns.js#L70-L77), and everything except `React.createElement()` is just inherited from React proper.
+
+### Namespacing existing React elements
+
+Providing the `React` option will also enable support for React elements in the `ns()` function, so that:
+
+```jsx
+ns(<div className="foo" />); // => <div class="MyComponent-foo" />
+```
+
+This can be useful in the (rare) cases where your namespace has to be dynamically applied to elements created by some other module. Because the only safe way to do this is to invoke `React.cloneElement()` under the hood, it can have performance implications if overused.
 
 ## Use with Sass
 
