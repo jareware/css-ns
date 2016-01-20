@@ -6,7 +6,7 @@
 
 There's no shortage of solutions to the [problem of global CSS](https://medium.com/seek-ui-engineering/the-end-of-global-css-90d2a4a06284). The properties that set this one apart:
 
- * **It's very simple**, on the order of 150 [well-tested](css-ns.spec.js) lines of JS.
+ * **It's very simple**, on the order of 100 [well-tested](css-ns.spec.js) lines of JS.
  * **Works with all your favorite styling languages**, including [Sass](http://sass-lang.com/), [PostCSS](https://github.com/postcss/postcss), [Less](http://lesscss.org/) and [Stylus](http://stylus-lang.com/).
  * **Doesn't rely on a specific bundler**, meaning you can use [Browserify](http://browserify.org/), [webpack](https://webpack.github.io/), [RequireJS](http://requirejs.org/), or any bundler-de-jour.
  * **Isn't tied to any UI framework**, but has opt-in convenience for [use with React](#usage-example), for example.
@@ -33,7 +33,7 @@ ns([ 'foo', null, 'bar' ]); // => "MyComponent-foo MyComponent-bar"
 ns({ foo: true, unwanted: false, bar: true }); // => "MyComponent-foo MyComponent-bar"
 
 // Namespacing React elements:
-ns(<div className="foo" />); // => <div className="MyComponent-foo" />
+ns(<div className="foo" />); // => <div class="MyComponent-foo" />
 ```
 
 ## Getting started
@@ -110,9 +110,11 @@ The `&` reference is a [Sass built-in](http://sass-lang.com/documentation/file.S
 
 ## Configuration
 
-The simple `require('css-ns')(__filename)` one-liner might very well be enough for some projects. If you need to set some options, however, it might become tedious to repeat them in every file where you need a namespace function. Having an `.*rc`-style configuration file would tie `css-ns` to environments with a file system (browsers don't have one), so to create a configuration file, just use whatever module system you're already using. Let's say we're using ES6:
+The simple `require('css-ns')(__filename)` one-liner might very well be enough for some projects. If you need to set some options, however, it might become tedious to repeat them in every file. Having an `.*rc`-style configuration file would tie `css-ns` to environments with a file system (browsers don't have one), so to create a configuration file, just use whatever module system you're already using. Let's say we're using ES6:
 
 ```js
+// e.g. utils/css-ns.js
+
 import createCssNs from 'css-ns';
 
 export default namespace => createCssNs({
@@ -121,10 +123,10 @@ export default namespace => createCssNs({
 });
 ```
 
-The above contents could go to e.g. `utils/css-ns.js`, or wherever your other utilities live. Then, to create a local namespace with the `exclude` option set:
+Then, to create a local namespace with the `exclude` option set:
 
 ```js
-import createCssNs from './utils/css-ns';
+import createCssNs from './utils/css-ns'; // instead of the global 'css-ns'
 
 const ns = createCssNs(__filename);
 ```
@@ -138,6 +140,31 @@ var ns = require('./utils/css-ns')(__filename);
 There's also a [complete demo app](demo/react) configured this way.
 
 ## API
+
+The `createCssNs()` factory takes either a string or an options object as its single argument:
+
+```js
+var createCssNs = require('css-ns');
+
+// This shorthand syntax...
+var ns = createCssNs(__filename);
+
+// ...is equivalent to this options object:
+var ns = createCssNs({
+  namespace: __filename
+});
+```
+
+All available options are:
+
+| Option      | Type   | Default    | Description
+|-------------|--------|------------|------------
+| `namespace` | string | (none)     | TODO
+| `include`   | regex  | `/^[a-z]/` | TODO
+| `exclude`   | regex  | `/^$/`     | TODO
+| `self`      | regex  | `/^this$/` | TODO
+| `glue`      | string | `"-"`      | TODO
+| `React`     | object | (none)     | TODO
 
 ## Use with React
 
