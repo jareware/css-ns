@@ -173,13 +173,15 @@ By default, `css-ns` doesn't use or depend on React in any way. This ensures bun
 ```js
 // e.g. config/css-ns.js
 
-import createCssNs from 'css-ns';
-import React from 'react';
+var createCssNs = require('css-ns');
+var React = require('react');
 
-export default namespace => createCssNs({
-  namespace,
-  React
-});
+module.exports = function(namespace) {
+  return createCssNs({
+    namespace,
+    React
+  });
+};
 ```
 
 ### Wrapped React instance
@@ -207,6 +209,8 @@ The wrapping is in fact [extremely thin](https://github.com/jareware/css-ns/blob
 Providing the `React` option will also enable support for React elements in the `ns()` function, so that:
 
 ```jsx
+var React = require('react'); // vanilla, non-wrapped React instance
+
 ns(<div className="foo" />); // => <div class="MyComponent-foo" />
 ```
 
