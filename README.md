@@ -7,10 +7,10 @@
 There's no shortage of solutions to the [problem of global CSS](https://medium.com/seek-ui-engineering/the-end-of-global-css-90d2a4a06284). The properties that set this one apart:
 
  * **It's very simple**, on the order of 150 [well-tested](css-ns.spec.js) lines of JS.
- * **Doesn't rely on a specific bundler**, meaning you can use [Browserify](http://browserify.org/), [webpack](https://webpack.github.io/), [RequireJS](http://requirejs.org/), or any bundler-de-jour.
  * **Works with all your favorite styling languages**, including [Sass](http://sass-lang.com/), [PostCSS](https://github.com/postcss/postcss), [Less](http://lesscss.org/) and [Stylus](http://stylus-lang.com/).
- * **Generates stable and predictable class names** for external parties, such as the consumers of your UI library on [npm](https://www.npmjs.com/), or your test automation system.
+ * **Doesn't rely on a specific bundler**, meaning you can use [Browserify](http://browserify.org/), [webpack](https://webpack.github.io/), [RequireJS](http://requirejs.org/), or any bundler-de-jour.
  * **Isn't tied to any UI framework**, but has opt-in convenience for [use with React](#usage-example), for example.
+ * **Generates stable and predictable class names** for external parties, such as the consumers of your UI library on [npm](https://www.npmjs.com/), or your test automation system.
 
 The core API is very straightforward:
 
@@ -22,7 +22,7 @@ ns('foo'); // => "MyComponent-foo"
 
 Everything else is just added convenience for working with class names:
 
-```js
+```jsx
 // Multiple class names:
 ns('foo bar'); // => "MyComponent-foo MyComponent-bar"
 
@@ -31,51 +31,10 @@ ns([ 'foo', null, 'bar' ]); // => "MyComponent-foo MyComponent-bar"
 
 // Providing class names as object properties:
 ns({ foo: true, unwanted: false, bar: true }); // => "MyComponent-foo MyComponent-bar"
+
+// Namespacing React elements:
+ns(<div className="foo" />); // => <div className="MyComponent-foo" />
 ```
-
-## Usage example
-
-`css-ns` can be used in a wide variety of of configurations. For instance, if you happen to use React, [stateless functional components](https://facebook.github.io/react/blog/2015/10/07/react-v0.14.html) and [`__filename`](https://nodejs.org/api/globals.html#globals_filename) (supported by node, Browserify, webpack and others), this is what `MyComponent.js` might look like, with the optional [React integration](#use-with-react):
-
-```jsx
-// Instead of importing React directly, let's import a
-// wrapped version that's bound to the current namespace:
-const { React } = require('./utils/css-ns')(__filename);
-
-// All className props within this file are automatically fed through css-ns. There's really no
-// magic here; keep in mind <div /> is just JSX sugar for React.createElement("div", {});
-export default (props) => (
-  <div className={{ this: true, isSelected: props.isSelected }}>
-    <button className="submit" />
-  </div>
-);
-```
-
-This component produces the following DOM when rendered with `props.isSelected` truthy:
-
-```html
-<div class="MyComponent MyComponent-isSelected">
-  <button class="MyComponent-submit"></button>
-</div>
-```
-
-If we were to style this component using Sass, the styles could be:
-
-```scss
-.MyComponent {
-  background: white;
-  
-  &-isSelected {
-    background: cyan;
-  }
-  
-  &-submit {
-    font-weight: bold;
-  }
-}
-```
-
-You'll note there's little need for constantly repeating the `MyComponent` prefix. This makes it hard to accidentally forget the prefix, thus causing a style leak. 
 
 ## Getting started
 
@@ -91,23 +50,63 @@ Then, create a namespace function:
 var ns = require('css-ns')('MyComponent');
 ```
 
-Where possible, it's recommended to use `__filename` as the namespace, as it ensures the name of the UI component file always matches its namespace. For convenience, the file path and suffix are ignored, so that if the filename is `/path/to/MyComponent.js`, the resulting namespace will still be `MyComponent`.
+## Usage example
 
-The `createCssNs()` factory takes either a string or an options object as its only argument:
+It's easy to add `css-ns` to most frameworks and workflows. For example, if you happen to use React, this is what `MyComponent.js` might look like:
 
-```js
-var createCssNs = require('css-ns');
+```jsx
+var ns = require('css-ns')('MyComponent');
 
-// This shorthand syntax...
-var ns = createCssNs(__filename);
-
-// ...is equivalent to this options object:
-var ns = createCssNs({
-  namespace: __filename
-});
+module.exports = (props) => (
+  <div className={ns('this')}>
+    <button className={ns({ submit: true, isActive: props.isActive })} />
+  </div>
+);
 ```
 
-See [full API docs](#api) for other available options.
+This component produces the following DOM when rendered with truthy `props.isActive`:
+
+```html
+<div class="MyComponent">
+  <button class="MyComponent-submit MyComponent-isActive"></button>
+</div>
+```
+
+To ensure you won't accidentally forget to wrap a `className` with `ns()`, you can use the optional [React integration](#use-with-react). Here we also use [`__filename`](https://nodejs.org/api/globals.html#globals_filename) (supported by node, Browserify, webpack and others) to make sure our namespace always matches the file that contains it:
+
+```jsx
+// Instead of requiring React directly, let's import a
+// wrapped version that's bound to the current namespace:
+var { React } = require('./utils/css-ns')(__filename);
+
+// All className props within this file are automatically fed through css-ns. There's really no
+// magic here; keep in mind <div /> is just JSX sugar for React.createElement("div", {});
+module.exports = (props) => (
+  <div className="this">
+    <button className={{ submit: true, isActive: props.isActive }} />
+  </div>
+);
+```
+
+You'll note we also `require('./utils/css-ns')`; this is explained thoroughly in [Configuration](#configuration).
+
+Finally, if we were to style this component [using Sass](#use-with-sass), those styles could be:
+
+```scss
+.MyComponent {
+  background: white;
+  
+  &-isActive {
+    background: cyan;
+  }
+  
+  &-submit {
+    font-weight: bold;
+  }
+}
+```
+
+The `&` reference is a [Sass built-in](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#parent-selector), no plugins needed.
 
 ## Configuration
 
@@ -122,7 +121,7 @@ export default namespace => createCssNs({
 });
 ```
 
-The above contents could go to e.g. `utils/css-ns.js`, or wherever your other utilities live. Then, wherever you wish to create a local namespace:
+The above contents could go to e.g. `utils/css-ns.js`, or wherever your other utilities live. Then, to create a local namespace with the `exclude` option set:
 
 ```js
 import createCssNs from './utils/css-ns';
