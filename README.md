@@ -22,7 +22,7 @@ ns('foo') // "MyComponent-foo"
 
 Everything else is just added convenience for working with class names:
 
-```jsx
+```js
 // Multiple class names:
 ns('foo bar') // "MyComponent-foo MyComponent-bar"
 
@@ -31,9 +31,20 @@ ns([ 'foo', null, 'bar' ]) // "MyComponent-foo MyComponent-bar"
 
 // Providing class names as object properties:
 ns({ foo: true, unwanted: false, bar: true }) // "MyComponent-foo MyComponent-bar"
+```
 
-// Namespacing React elements:
+With the optional React integration:
+
+```jsx
+// Simplest possible integration:
+<div className={ns('foo')} />) // <div class="MyComponent-foo" />
+
+// Namespacing existing elements:
 ns(<div className="foo" />) // <div class="MyComponent-foo" />
+
+// Creating a namespace-bound React instance:
+var { React } = require('./config/css-ns')('MyComponent');
+<div className="foo" /> // <div class="MyComponent-foo" />
 ```
 
 ## Getting started
