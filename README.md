@@ -7,7 +7,7 @@
 There's no shortage of solutions to the [problem of global CSS](https://medium.com/seek-ui-engineering/the-end-of-global-css-90d2a4a06284). The properties that set this one apart:
 
  * **It's very simple**, on the order of 100 [well-tested](css-ns.spec.js) lines of JS.
- * **Works with all your favorite styling languages**, including [Sass](http://sass-lang.com/), [PostCSS](https://github.com/postcss/postcss), [Less](http://lesscss.org/) and [Stylus](http://stylus-lang.com/).
+ * **Works with all your favorite styling languages**, including [Sass](#use-with-sass), [PostCSS](#use-with-postcss), [Less](#use-with-less) and [Stylus](#use-with-stylus).
  * **Doesn't rely on a specific bundler**, meaning you can use [Browserify](http://browserify.org/), [webpack](https://webpack.github.io/), [RequireJS](http://requirejs.org/), or any bundler-de-jour.
  * **Isn't tied to any UI framework**, but has opt-in convenience for [use with React](#usage-example), for example.
  * **Generates stable and predictable class names** for external parties, such as the consumers of your UI library on [npm](https://www.npmjs.com/), or your test automation system.
@@ -17,23 +17,23 @@ The core API is very straightforward:
 ```js
 var ns = require('css-ns')('MyComponent');
 
-ns('foo'); // => "MyComponent-foo"
+ns('foo') // "MyComponent-foo"
 ```
 
 Everything else is just added convenience for working with class names:
 
 ```jsx
 // Multiple class names:
-ns('foo bar'); // => "MyComponent-foo MyComponent-bar"
+ns('foo bar') // "MyComponent-foo MyComponent-bar"
 
 // Dynamic list of class names, filtering falsy ones out:
-ns([ 'foo', null, 'bar' ]); // => "MyComponent-foo MyComponent-bar"
+ns([ 'foo', null, 'bar' ]) // "MyComponent-foo MyComponent-bar"
 
 // Providing class names as object properties:
-ns({ foo: true, unwanted: false, bar: true }); // => "MyComponent-foo MyComponent-bar"
+ns({ foo: true, unwanted: false, bar: true }) // "MyComponent-foo MyComponent-bar"
 
 // Namespacing React elements:
-ns(<div className="foo" />); // => <div class="MyComponent-foo" />
+ns(<div className="foo" />) // <div class="MyComponent-foo" />
 ```
 
 ## Getting started
@@ -191,7 +191,7 @@ Providing the `React` option will expose a wrapped React instance on resulting n
 ```js
 var ns = require('./config/css-ns')('MyComponent');
 
-ns.React.createElement('div', { className: 'foo' }); // => <div class="MyComponent-foo">
+ns.React.createElement('div', { className: 'foo' }) // <div class="MyComponent-foo">
 ```
 
 Because JSX just sugar for `React.createElement()` calls, this allows you to:
@@ -199,7 +199,7 @@ Because JSX just sugar for `React.createElement()` calls, this allows you to:
 ```jsx
 var { React } = require('./config/css-ns')('MyComponent');
 
-<div className="foo">; // => <div class="MyComponent-foo">
+<div className="foo"> // <div class="MyComponent-foo">
 ```
 
 The wrapping is in fact [extremely thin](https://github.com/jareware/css-ns/blob/b62b5d4aef6d8c43707622da2fa63eeb601bdb66/css-ns.js#L70-L77), and everything except `React.createElement()` is just inherited from React proper.
@@ -211,18 +211,108 @@ Providing the `React` option will also enable support for React elements in the 
 ```jsx
 var React = require('react'); // vanilla, non-wrapped React instance
 
-ns(<div className="foo" />); // => <div class="MyComponent-foo" />
+ns(<div className="foo" />) // <div class="MyComponent-foo" />
 ```
 
 This can be useful in the (rare) cases where your namespace has to be dynamically applied to elements created by some other module. Because the only safe way to do this is to invoke `React.cloneElement()` under the hood, it can have performance implications if overused.
 
 ## Use with Sass
 
+Use with [Sass](http://sass-lang.com/) requires no special support or plugins. This input:
+
+```scss
+.MyComponent {
+  background: cyan;
+
+  &-row {
+    color: red;
+  }
+}
+```
+
+will be compiled to this CSS:
+
+```css
+.MyComponent {
+  background: cyan;
+}
+.MyComponent-row {
+  color: red;
+}
+```
+
 ## Use with PostCSS
+
+Use with [PostCSS](https://github.com/postcss/postcss) is easiest with the [`postcss-nested`](https://github.com/postcss/postcss-nested) plugin. With it, this input:
+
+```scss
+.MyComponent {
+  background: cyan;
+
+  &-row {
+    color: red;
+  }
+}
+```
+
+will be compiled to this CSS:
+
+```css
+.MyComponent {
+  background: cyan;
+}
+.MyComponent-row {
+  color: red;
+}
+```
 
 ## Use with Less
 
+Use with [Less](http://lesscss.org/) requires no special support or plugins. This input:
+
+```less
+.MyComponent {
+  background: cyan;
+
+  &-row {
+    color: red;
+  }
+}
+```
+
+will be compiled to this CSS:
+
+```css
+.MyComponent {
+  background: cyan;
+}
+.MyComponent-row {
+  color: red;
+}
+```
+
 ## Use with Stylus
+
+Use with [Stylus](http://stylus-lang.com/) requires no special support or plugins. This input:
+
+```
+.MyComponent
+  background: cyan
+
+  &-row
+    color: red
+```
+
+will be compiled to this CSS:
+
+```css
+.MyComponent {
+  background: cyan;
+}
+.MyComponent-row {
+  color: red;
+}
+```
 
 ## Licence
 
