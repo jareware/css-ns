@@ -6,7 +6,7 @@
 
 There's no shortage of solutions to the [problem of global CSS](https://medium.com/seek-ui-engineering/the-end-of-global-css-90d2a4a06284). The properties that set this one apart:
 
- * **It's very simple**, on the order of 100 [well-tested](css-ns.spec.js) lines of JS, with [0 dependencies](package.json).
+ * **It's very simple**, on the order of 100 [well](css-ns.spec.js)-[tested](selenium.png) lines of JS, with [0 dependencies](package.json).
  * **Works with all your favorite styling languages**, including [Sass](#use-with-sass), [PostCSS](#use-with-postcss), [Less](#use-with-less) and [Stylus](#use-with-stylus).
  * **Doesn't rely on a specific bundler**, meaning you can use [Browserify](http://browserify.org/), [webpack](https://webpack.github.io/), [RequireJS](http://requirejs.org/), or any bundler-de-jour.
  * **Isn't tied to any UI framework**, but has opt-in convenience for [use with React](#usage-example), for example.
