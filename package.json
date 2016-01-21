@@ -5,13 +5,16 @@
   "main": "css-ns.js",
   "dependencies": {},
   "devDependencies": {
+    "browserify": "12.0.1",
     "chai": "3.3.0",
     "mocha": "2.3.3",
     "react": "0.14.0",
     "react-dom": "0.14.0"
   },
   "scripts": {
-    "test": "mocha *.spec.js"
+    "test": "mocha *.spec.js",
+    "test-build": "browserify *.spec.js -v -o test/suite.js",
+    "deploy-gh-pages": "git stash && npm run test-build && cp -r test temp && git checkout gh-pages && mv temp/* . && rm -rf temp && git commit -am 'Automatic gh-pages deploy' && git push origin gh-pages && git checkout -"
   },
   "author": "Jarno Rantanen <jarno@jrw.fi>",
   "license": "MIT"
