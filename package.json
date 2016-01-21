@@ -12,6 +12,10 @@
     "react-dom": "0.14.0",
     "webdriverio": "3.2.6"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jareware/css-ns.git"
+  },
   "scripts": {
     "test": "mocha *.spec.js",
     "test-build": "browserify *.spec.js -v -o test/suite.js",
