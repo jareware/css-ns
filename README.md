@@ -45,6 +45,7 @@ ns(<div className="foo" />) // <div class="MyComponent-foo" />
 // Creating a namespace-bound React instance:
 var { React } = require('./config/css-ns')('MyComponent');
 <div className="foo" /> // <div class="MyComponent-foo" />
+<div className={{ foo: true }} /> // <div class="MyComponent-foo" />
 ```
 
 ## Getting started
