@@ -5,8 +5,28 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="mocha.css" />
+    <style>
+        #banner {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            padding: 20px 60px;
+        }
+        #banner h1 {
+            font-size: 1.2em;
+            font-weight: 200;
+        }
+        #banner p {
+            font-size: 12px;
+        }
+        #mocha {
+            margin-top: 0;
+        }
+    </style>
 </head>
 <body>
+    <div id="banner">
+        <h1>This is the <a href="https://github.com/jareware/css-ns"><code>css-ns</code></a> test runner.</h1>
+        <p>If you see something's broken on your browser, <a href="https://github.com/jareware/css-ns/issues">filing an issue</a> is much appreciated.</p>
+    </div>
     <div id="mocha"></div>
     <script src="mocha.js"></script>
     <script>mocha.setup('bdd');</script>
