@@ -37,15 +37,15 @@ And with the optional [React integration](#use-with-react):
 
 ```jsx
 // Simplest possible integration:
-<div className={ns('foo')} /> // <div class="MyComponent-foo"></div>
+<div className={ns('foo')} /> // <div class="MyComponent-foo">
 
 // Namespacing existing elements:
-ns(<div className="foo" />) // <div class="MyComponent-foo"></div>
+ns(<div className="foo" />) // <div class="MyComponent-foo">
 
 // Creating a namespace-bound React instance:
 var { React } = require('./config/css-ns')('MyComponent');
-<div className="foo" /> // <div class="MyComponent-foo"></div>
-<div className={{ foo: true }} /> // <div class="MyComponent-foo"></div>
+<div className="foo" /> // <div class="MyComponent-foo">
+<div className={{ foo: true }} /> // <div class="MyComponent-foo">
 ```
 
 ## Getting started
@@ -223,7 +223,7 @@ Providing the `React` option will also enable support for React elements in the 
 ```jsx
 var React = require('react'); // vanilla, non-wrapped React instance
 
-ns(<div className="foo" />) // <div class="MyComponent-foo" />
+ns(<div className="foo" />) // <div class="MyComponent-foo">
 ```
 
 This can be useful in the (rare) cases where your namespace has to be dynamically applied to elements created by some other module. Because the only safe way to do this is to invoke `React.cloneElement()` under the hood, it can have performance implications if overused.
