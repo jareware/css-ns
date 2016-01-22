@@ -37,15 +37,15 @@ And with the optional [React integration](#use-with-react):
 
 ```jsx
 // Simplest possible integration:
-<div className={ns('foo')} /> // <div class="MyComponent-foo" />
+<div className={ns('foo')} /> // <div class="MyComponent-foo"></div>
 
 // Namespacing existing elements:
-ns(<div className="foo" />) // <div class="MyComponent-foo" />
+ns(<div className="foo" />) // <div class="MyComponent-foo"></div>
 
 // Creating a namespace-bound React instance:
 var { React } = require('./config/css-ns')('MyComponent');
-<div className="foo" /> // <div class="MyComponent-foo" />
-<div className={{ foo: true }} /> // <div class="MyComponent-foo" />
+<div className="foo" /> // <div class="MyComponent-foo"></div>
+<div className={{ foo: true }} /> // <div class="MyComponent-foo"></div>
 ```
 
 ## Getting started
