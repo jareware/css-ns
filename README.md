@@ -9,7 +9,7 @@ There's no shortage of solutions to the [problem of global CSS](https://medium.c
  * **It's very simple**, on the order of 100 [well](css-ns.spec.js)-[tested](selenium.png) lines of JS, with [0 dependencies](package.json).
  * **Works with all your favorite styling languages**, including [Sass](#use-with-sass), [PostCSS](#use-with-postcss), [Less](#use-with-less) and [Stylus](#use-with-stylus).
  * **Doesn't rely on a specific bundler**, meaning you can use [Browserify](http://browserify.org/), [webpack](https://webpack.github.io/), [RequireJS](http://requirejs.org/), or any bundler-de-jour.
- * **Isn't tied to any UI framework**, but has opt-in convenience for [use with React](#usage-example), for example.
+ * **Isn't tied to any UI framework**, but has opt-in convenience for [use with React](#usage-example).
  * **Generates stable and predictable class names** for external parties, such as the consumers of your UI library on [npm](https://www.npmjs.com/), or your test automation system.
 
 The core API is very straightforward:
@@ -47,6 +47,8 @@ var { React } = require('./config/css-ns')('MyComponent');
 <div className="foo" /> // <div class="MyComponent-foo">
 <div className={{ foo: true }} /> // <div class="MyComponent-foo">
 ```
+
+Creating a bound React instance is a powerful way of **enforcing a namespace** within a file.
 
 ## Getting started
 
