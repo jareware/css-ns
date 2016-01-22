@@ -37,7 +37,7 @@ And with the optional [React integration](#use-with-react):
 
 ```jsx
 // Simplest possible integration:
-<div className={ns('foo')} />) // <div class="MyComponent-foo" />
+<div className={ns('foo')} /> // <div class="MyComponent-foo" />
 
 // Namespacing existing elements:
 ns(<div className="foo" />) // <div class="MyComponent-foo" />
