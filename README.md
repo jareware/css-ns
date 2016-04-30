@@ -174,6 +174,7 @@ All available options are:
 | Option      | Type   | Default    | Description
 |-------------|--------|------------|------------
 | `namespace` | string | (none)     | Mandatory base part for the namespace, e.g. `"MyComponent"` or `__filename`. For convenience, a possible file path and suffix are ignored, so that if the provided value is `"/path/to/MyComponent.js"`, the resulting namespace will still be `"MyComponent"`.
+| `prefix`    | string | `""`       | All namespaces are prefixed with this string. By default, namespaces aren't prefixed. Class names that begin with this `prefix` are automatically excluded .
 | `include`   | regex  | `/^[a-z]/` | Only class names matching this regex are namespaced. By default, only ones starting in lower-case are. This works out nicely with upper-cased `namespace` values: it ensures only one namespace can be applied to a class name, and calling `ns()` multiple times has the same effect as calling it once.
 | `exclude`   | regex  | `/^$/`     | Class names matching this regex are not namespaced. By default, nothing is excluded (since `/^$/` won't ever match a class name). When both `include` and `exclude` match, `exclude` wins.
 | `self`      | regex  | `/^this$/` | Class names matching this regex are replaced with the name of the namespace itself. This allows you to e.g. mark the root of your UI component without any suffixes, just the component name.

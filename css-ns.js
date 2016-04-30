@@ -47,6 +47,7 @@ function createOptions(raw) {
   assert(isObject(raw), 'Options must be provided either as an object or a string, got: ' + raw);
   return {
     namespace:  assertStringOption( 'namespace', raw.namespace).replace(/.*\/([\w-]+).*/, '$1'),  // e.g. "/path/to/MyComponent.js" becomes "MyComponent"
+    prefix:     assertStringOption( 'prefix',    raw.prefix  || ''),                              // e.g. "myapp-"
     include:    assertRegexOption(  'include',   raw.include || /^[a-z]/),                        // assume upper-cased classes are other components
     exclude:    assertRegexOption(  'exclude',   raw.exclude || /^$/),                            // don't exclude anything by default (this regex will never match anything of relevance)
     self:       assertRegexOption(  'self',      raw.self    || /^this$/),                        // "this" references the current component directly
@@ -96,12 +97,14 @@ function nsString(options, string) {
   assert(isString(string), 'nsString() expects string input, got: ' + string);
   var opt = createOptions(options);
   return string.split(/\s+/).map(function(cls) {
-    if (cls.match(opt.self))
-      return opt.namespace;
-    else if (cls.match(opt.include) && !cls.match(opt.exclude))
-      return opt.namespace + opt.glue + cls;
-    else
-      return cls;
+    if (cls.match(opt.self)) // e.g. "this"
+      return opt.prefix + opt.namespace;
+    else if (opt.prefix && cls.substr(0, opt.prefix.length) === opt.prefix) // already prefixed
+      return cls; // => don't touch it
+    else if (cls.match(opt.include) && !cls.match(opt.exclude)) // matching non-prefixed, non-namespaced class name
+      return opt.prefix + opt.namespace + opt.glue + cls; // => prefix & namespace
+    else // something else
+      return cls; // => don't touch it
   }).join(' ').trim();
 }
 

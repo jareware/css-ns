@@ -141,6 +141,89 @@ describe('css-ns', function() {
       assert.equal(cssNs.nsString(options, 'bar'), 'Foo___bar');
     });
 
+    describe('with prefix', function() {
+
+      it('prefixes a single class', function() {
+        assert.equal(cssNs.nsString({ prefix: 'app-', namespace: 'Foo' }, 'bar'), 'app-Foo-bar');
+      });
+
+      it('prefixes multiple classes', function() {
+        assert.equal(cssNs.nsString({ prefix: 'app-', namespace: 'Foo' }, 'bar baz'), 'app-Foo-bar app-Foo-baz');
+      });
+
+      it('tolerates exotic classNames and whitespace', function() {
+        // ...not that using these would be a good idea for other reasons, but we won't judge!
+        assert.equal(cssNs.nsString({ prefix: 'app-', namespace: 'Foo' }, '   bar-baz   lol{wtf$why%would__ANYONE"do.this}   '), 'app-Foo-bar-baz app-Foo-lol{wtf$why%would__ANYONE"do.this}');
+      });
+
+      it('supports an include option', function() {
+        var options = {
+          prefix: 'app-',
+          namespace: 'Foo',
+          include: /^b/ // only prefix classes that start with b
+        };
+        assert.equal(
+          cssNs.nsString(options, 'bar AnotherComponent car'),
+          'app-Foo-bar AnotherComponent car'
+        );
+      });
+
+      it('supports an exclude option', function() {
+        var options = {
+          prefix: 'app-',
+          namespace: 'Foo',
+          exclude: /^([A-Z]|icon)/ // ignore classes that start with caps or "icon"
+        };
+        assert.equal(
+          cssNs.nsString(options, 'bar AnotherComponent iconInfo baz'),
+          'app-Foo-bar AnotherComponent iconInfo app-Foo-baz'
+        );
+      });
+
+      it('supports both include and exclude at the same time', function() {
+        var options = {
+          prefix: 'app-',
+          namespace: 'Foo',
+          include: /^[a-z]/, // include classes that start with lower-case
+          exclude: /^icon/ // ...but still ignore the "icon" prefix
+        };
+        assert.equal(
+          cssNs.nsString(options, 'bar iconInfo baz'),
+          'app-Foo-bar iconInfo app-Foo-baz'
+        );
+      });
+
+      it('supports a self option', function() {
+        var options = {
+          prefix: 'app-',
+          namespace: 'Foo',
+          self: /^__ns__$/
+        };
+        assert.equal(cssNs.nsString(options, '__ns__ bar'), 'app-Foo app-Foo-bar');
+      });
+
+      it('supports a glue option', function() {
+        var options = {
+          prefix: 'app-',
+          namespace: 'Foo',
+          glue: '___'
+        };
+        assert.equal(cssNs.nsString(options, 'bar'), 'app-Foo___bar');
+      });
+
+      it('automatically ignores pre-prefixed classes', function() {
+        var options = {
+          prefix: 'app-',
+          namespace: 'Foo'
+        };
+        assert.equal(
+          cssNs.nsString(options, 'bar app-AnotherComponent app-car'),
+          'app-Foo-bar app-AnotherComponent app-car'
+        );
+      });
+
+    });
+
   });
 
   describe('nsArray()', function() {
