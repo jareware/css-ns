@@ -10,6 +10,9 @@ function assertEqualHtml(Component, expectedHtml) {
   );
 }
 
+// Enable this to repeat the test suite a few times
+// for (var i = 0; i < 100; i++)
+
 describe('css-ns', function() {
 
   describe('createOptions()', function() {
