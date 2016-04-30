@@ -59,6 +59,7 @@ function createOptions(raw) {
 function createCssNs(options) {
   var opt = createOptions(options);
   var ns = nsAuto.bind(null, opt);
+  ns.ns = ns; // allows: const { ns, React } = createCssNs(__filename);
   if (opt.React) ns.React = createReact(opt, ns);
   return ns;
 }
