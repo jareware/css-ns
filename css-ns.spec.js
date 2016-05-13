@@ -38,6 +38,20 @@ describe('css-ns', function() {
       );
     });
 
+    it('accepts a full Windows file path', function() {
+      assert.deepEqual(
+        cssNs.createOptions('C:\\Users\\path\\to\\MyComponent.jsx').namespace,
+        'MyComponent'
+      );
+    });
+
+    it('accepts a full Windows file path with whitespace', function() {
+      assert.deepEqual(
+        cssNs.createOptions('C:\\Program Files\\path\\to\\MyComponent.js').namespace,
+        'MyComponent'
+      );
+    });
+
     it('processes options only once', function() {
       assert.deepEqual(
         cssNs.createOptions(cssNs.createOptions('MyComponent')).namespace,

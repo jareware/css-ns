@@ -8,6 +8,8 @@ module.exports.nsArray = nsArray;
 module.exports.nsObject = nsObject;
 module.exports.nsReactElement = nsReactElement;
 
+const FILE_BASENAME = /.*[\/\\]([\w-]+).*/;
+
 function isString(x) {
   return typeof x === 'string';
 }
@@ -46,7 +48,7 @@ function createOptions(raw) {
   if (isString(raw)) return createOptions({ namespace: raw }); // shorthand for just specifying the namespace
   assert(isObject(raw), 'Options must be provided either as an object or a string, got: ' + raw);
   return {
-    namespace:  assertStringOption( 'namespace', raw.namespace).replace(/.*\/([\w-]+).*/, '$1'),  // e.g. "/path/to/MyComponent.js" becomes "MyComponent"
+    namespace:  assertStringOption( 'namespace', raw.namespace).replace(FILE_BASENAME, '$1'),     // e.g. "/path/to/MyComponent.js" becomes "MyComponent"
     prefix:     assertStringOption( 'prefix',    raw.prefix  || ''),                              // e.g. "myapp-"
     include:    assertRegexOption(  'include',   raw.include || /^[a-z]/),                        // assume upper-cased classes are other components
     exclude:    assertRegexOption(  'exclude',   raw.exclude || /^$/),                            // don't exclude anything by default (this regex will never match anything of relevance)
