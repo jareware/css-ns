@@ -9,6 +9,8 @@ module.exports.nsArray = nsArray;
 module.exports.nsObject = nsObject;
 module.exports.nsReactElement = nsReactElement;
 
+const FILE_BASENAME = /.*[\/\\]([\w-]+).*/;
+
 function isString(x) {
   return typeof x === 'string';
 }
@@ -47,19 +49,21 @@ function createOptions(raw) {
   if (isString(raw)) return createOptions({ namespace: raw }); // shorthand for just specifying the namespace
   assert(isObject(raw), 'Options must be provided either as an object or a string, got: ' + raw);
   return {
-    namespace:  assertStringOption( 'namespace', raw.namespace).replace(/.*\/([\w-]+).*/, '$1'),  // e.g. "/path/to/MyComponent.js" becomes "MyComponent"
+    namespace:  assertStringOption( 'namespace', raw.namespace).replace(FILE_BASENAME, '$1'),     // e.g. "/path/to/MyComponent.js" becomes "MyComponent"
+    prefix:     assertStringOption( 'prefix',    raw.prefix  || ''),                              // e.g. "myapp-"
     include:    assertRegexOption(  'include',   raw.include || /^[a-z]/),                        // assume upper-cased classes are other components
     exclude:    assertRegexOption(  'exclude',   raw.exclude || /^$/),                            // don't exclude anything by default (this regex will never match anything of relevance)
     self:       assertRegexOption(  'self',      raw.self    || /^this$/),                        // "this" references the current component directly
     glue:       assertStringOption( 'glue',      raw.glue    || '-'),                             // allows e.g. "MyComponent_foo" when set to "_"
     React:      raw.React && assertObjectOption('React', raw.React) || null,                      // passing in a React instance enables the React convenience methods
-    _cssNsOpts: true                                                                              // simple flag signaling that options are already processed
+    _cssNsOpts: true                                                                              // flag signaling that options are already processed, and don't need to be processed again
   };
 }
 
 function createCssNs(options) {
   var opt = createOptions(options);
   var ns = nsAuto.bind(null, opt);
+  ns.ns = ns; // allows: const { ns, React } = createCssNs(__filename);
   if (opt.React) ns.React = createReact(opt, ns);
   return ns;
 }
@@ -96,12 +100,14 @@ function nsString(options, string) {
   assert(isString(string), 'nsString() expects string input, got: ' + string);
   var opt = createOptions(options);
   return string.split(/\s+/).map(function(cls) {
-    if (cls.match(opt.self))
-      return opt.namespace;
-    else if (cls.match(opt.include) && !cls.match(opt.exclude))
-      return opt.namespace + opt.glue + cls;
-    else
-      return cls;
+    if (cls.match(opt.self)) // e.g. "this"
+      return opt.prefix + opt.namespace;
+    else if (opt.prefix && cls.substr(0, opt.prefix.length) === opt.prefix) // already prefixed
+      return cls; // => don't touch it
+    else if (cls.match(opt.include) && !cls.match(opt.exclude)) // matching non-prefixed, non-namespaced class name
+      return opt.prefix + opt.namespace + opt.glue + cls; // => prefix & namespace
+    else // something else
+      return cls; // => don't touch it
   }).join(' ').trim();
 }
 
@@ -144,6 +150,9 @@ function assertEqualHtml(Component, expectedHtml) {
   );
 }
 
+// Enable this to repeat the test suite a few times
+// for (var i = 0; i < 100; i++)
+
 describe('css-ns', function() {
 
   describe('createOptions()', function() {
@@ -166,6 +175,27 @@ describe('css-ns', function() {
       assert.deepEqual(
         cssNs.createOptions('../MyComponent.jsx').namespace,
         'MyComponent'
+      );
+    });
+
+    it('accepts a full Windows file path', function() {
+      assert.deepEqual(
+        cssNs.createOptions('C:\\Users\\path\\to\\MyComponent.jsx').namespace,
+        'MyComponent'
+      );
+    });
+
+    it('accepts a full Windows file path with whitespace', function() {
+      assert.deepEqual(
+        cssNs.createOptions('C:\\Program Files\\path\\to\\MyComponent.js').namespace,
+        'MyComponent'
+      );
+    });
+
+    it('accepts underscores in file names', function() {
+      assert.deepEqual(
+        cssNs.createOptions('../my_component.jsx').namespace,
+        'my_component'
       );
     });
 
@@ -273,6 +303,89 @@ describe('css-ns', function() {
         glue: '___'
       };
       assert.equal(cssNs.nsString(options, 'bar'), 'Foo___bar');
+    });
+
+    describe('with prefix', function() {
+
+      it('prefixes a single class', function() {
+        assert.equal(cssNs.nsString({ prefix: 'app-', namespace: 'Foo' }, 'bar'), 'app-Foo-bar');
+      });
+
+      it('prefixes multiple classes', function() {
+        assert.equal(cssNs.nsString({ prefix: 'app-', namespace: 'Foo' }, 'bar baz'), 'app-Foo-bar app-Foo-baz');
+      });
+
+      it('tolerates exotic classNames and whitespace', function() {
+        // ...not that using these would be a good idea for other reasons, but we won't judge!
+        assert.equal(cssNs.nsString({ prefix: 'app-', namespace: 'Foo' }, '   bar-baz   lol{wtf$why%would__ANYONE"do.this}   '), 'app-Foo-bar-baz app-Foo-lol{wtf$why%would__ANYONE"do.this}');
+      });
+
+      it('supports an include option', function() {
+        var options = {
+          prefix: 'app-',
+          namespace: 'Foo',
+          include: /^b/ // only prefix classes that start with b
+        };
+        assert.equal(
+          cssNs.nsString(options, 'bar AnotherComponent car'),
+          'app-Foo-bar AnotherComponent car'
+        );
+      });
+
+      it('supports an exclude option', function() {
+        var options = {
+          prefix: 'app-',
+          namespace: 'Foo',
+          exclude: /^([A-Z]|icon)/ // ignore classes that start with caps or "icon"
+        };
+        assert.equal(
+          cssNs.nsString(options, 'bar AnotherComponent iconInfo baz'),
+          'app-Foo-bar AnotherComponent iconInfo app-Foo-baz'
+        );
+      });
+
+      it('supports both include and exclude at the same time', function() {
+        var options = {
+          prefix: 'app-',
+          namespace: 'Foo',
+          include: /^[a-z]/, // include classes that start with lower-case
+          exclude: /^icon/ // ...but still ignore the "icon" prefix
+        };
+        assert.equal(
+          cssNs.nsString(options, 'bar iconInfo baz'),
+          'app-Foo-bar iconInfo app-Foo-baz'
+        );
+      });
+
+      it('supports a self option', function() {
+        var options = {
+          prefix: 'app-',
+          namespace: 'Foo',
+          self: /^__ns__$/
+        };
+        assert.equal(cssNs.nsString(options, '__ns__ bar'), 'app-Foo app-Foo-bar');
+      });
+
+      it('supports a glue option', function() {
+        var options = {
+          prefix: 'app-',
+          namespace: 'Foo',
+          glue: '___'
+        };
+        assert.equal(cssNs.nsString(options, 'bar'), 'app-Foo___bar');
+      });
+
+      it('automatically ignores pre-prefixed classes', function() {
+        var options = {
+          prefix: 'app-',
+          namespace: 'Foo'
+        };
+        assert.equal(
+          cssNs.nsString(options, 'bar app-AnotherComponent app-car'),
+          'app-Foo-bar app-AnotherComponent app-car'
+        );
+      });
+
     });
 
   });
