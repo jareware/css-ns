@@ -52,6 +52,13 @@ describe('css-ns', function() {
       );
     });
 
+    it('accepts underscores in file names', function() {
+      assert.deepEqual(
+        cssNs.createOptions('../my_component.jsx').namespace,
+        'my_component'
+      );
+    });
+
     it('processes options only once', function() {
       assert.deepEqual(
         cssNs.createOptions(cssNs.createOptions('MyComponent')).namespace,
