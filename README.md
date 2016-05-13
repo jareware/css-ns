@@ -329,6 +329,10 @@ will be compiled to this CSS:
 }
 ```
 
+## Test suite
+
+The web-based test suite is available at http://jrw.fi/css-ns/.
+
 ## Licence
 
 [MIT](https://opensource.org/licenses/MIT)
