@@ -53,7 +53,7 @@ function createOptions(raw) {
     self:       assertRegexOption(  'self',      raw.self    || /^this$/),                        // "this" references the current component directly
     glue:       assertStringOption( 'glue',      raw.glue    || '-'),                             // allows e.g. "MyComponent_foo" when set to "_"
     React:      raw.React && assertObjectOption('React', raw.React) || null,                      // passing in a React instance enables the React convenience methods
-    _cssNsOpts: true                                                                              // simple flag signaling that options are already processed
+    _cssNsOpts: true                                                                              // flag signaling that options are already processed, and don't need to be processed again
   };
 }
 
