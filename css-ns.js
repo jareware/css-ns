@@ -8,7 +8,7 @@ module.exports.nsArray = nsArray;
 module.exports.nsObject = nsObject;
 module.exports.nsReactElement = nsReactElement;
 
-const FILE_BASENAME = /.*[\/\\]([\w-]+).*/;
+var FILE_BASENAME = /.*[\/\\]([\w-]+).*/;
 
 function isString(x) {
   return typeof x === 'string';
