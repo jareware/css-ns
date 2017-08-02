@@ -23,5 +23,6 @@
     "deploy-gh-pages": "git stash && npm run test-build && cp -r test temp && git checkout gh-pages && mv temp/* . && rm -rf temp && git commit -am 'Automatic gh-pages deploy' && git push origin gh-pages && git checkout -"
   },
   "author": "Jarno Rantanen <jarno@jrw.fi>",
-  "license": "MIT"
+  "license": "MIT",
+  "types": "./index.d.ts"
 }
