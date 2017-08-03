@@ -333,6 +333,13 @@ will be compiled to this CSS:
 
 The web-based test suite is available at http://jrw.fi/css-ns/.
 
+## Release
+
+1. Bump version number in `package.json`
+1. `$ git commit -m "Version bump for release." && git push`
+1. `$ npm publish`
+1. Create release on GitHub, e.g. `v1.1.3`
+
 ## Licence
 
 [MIT](https://opensource.org/licenses/MIT)
