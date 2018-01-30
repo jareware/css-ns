@@ -28,5 +28,5 @@
   },
   "author": "Jarno Rantanen <jarno@jrw.fi>",
   "license": "MIT",
-  "types": "./index.d.ts"
+  "types": "./css-ns.d.ts"
 }
