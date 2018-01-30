@@ -2,5 +2,4 @@
 .env
 .DS_Store
 /node_modules
-/hours.txt
-/intro.key
+/.history
