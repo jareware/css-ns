@@ -1,25 +1,28 @@
 var webdriverio = require('webdriverio');
 
 var TARGETS = [ // @see https://saucelabs.com/platforms/ && https://code.google.com/p/selenium/wiki/DesiredCapabilities
-  [ 'Chrome', '47' ],
-  [ 'Chrome', '46' ],
-  [ 'Chrome', '45' ],
-  [ 'Firefox', '43' ],
-  [ 'Firefox', '42' ],
-  [ 'Firefox', '41' ],
+  [ 'Chrome', '64' ],
+  [ 'Chrome', '63' ],
+  [ 'Chrome', '62' ],
+  [ 'Chrome', '61' ],
+  [ 'Chrome', '60' ],
+  [ 'Firefox', '57' ],
+  [ 'Firefox', '56' ],
+  [ 'Firefox', '55' ],
+  [ 'Firefox', '54' ],
+  [ 'Firefox', '53' ],
+  [ 'MicrosoftEdge', '16' ],
+  [ 'MicrosoftEdge', '15' ],
+  [ 'MicrosoftEdge', '14' ],
+  [ 'MicrosoftEdge', '13' ],
   [ 'Internet Explorer', '11' ],
   [ 'Internet Explorer', '10' ],
   [ 'Internet Explorer', '9' ],
-  //[ 'Internet Explorer', '8' ], // FAILS
+  [ 'Safari', '11' ],
+  [ 'Safari', '10' ],
   [ 'Safari', '9' ],
   [ 'Safari', '8' ],
   [ 'Safari', '7' ],
-  [ 'Safari', '6' ],
-  [ 'iPhone', '9.2' ],
-  [ 'iPhone', '8.4' ],
-  [ 'iPhone', '7.1' ],
-  [ 'iPhone', '6.1' ],
-  //[ 'iPhone', '5.1' ], // FAILS
 ];
 
 var EXPECTED_PASS_COUNT = 47; // TODO: Update this whenever the test suite has grown!
