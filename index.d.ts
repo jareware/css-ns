@@ -6,7 +6,7 @@ declare module 'css-ns' {
     exclude?: RegExp;
     self?: RegExp;
     glue?: string;
-    ignorePrefix?: string;
+    escape?: string;
     React?: R;
   }
 
