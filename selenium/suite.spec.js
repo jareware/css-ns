@@ -22,7 +22,7 @@ var TARGETS = [ // @see https://saucelabs.com/platforms/ && https://code.google.
   //[ 'iPhone', '5.1' ], // FAILS
 ];
 
-var EXPECTED_PASS_COUNT = 32; // TODO: Update this whenever the test suite has grown!
+var EXPECTED_PASS_COUNT = 47; // TODO: Update this whenever the test suite has grown!
 
 describe('css-ns', function() {
 
