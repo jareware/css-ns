@@ -31,6 +31,9 @@ ns([ 'foo', null, 'bar' ]) // "MyComponent-foo MyComponent-bar"
 
 // Providing class names as object properties:
 ns({ foo: true, unwanted: false, bar: true }) // "MyComponent-foo MyComponent-bar"
+
+// Escaping the namespace where needed:
+ns('foo =icon-star') // "MyComponent-foo icon-star"
 ```
 
 And with the optional [React integration](#use-with-react):
