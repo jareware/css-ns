@@ -132,7 +132,7 @@ The simple `require('css-ns')(__filename)` one-liner might very well be enough f
 ```js
 // e.g. config/css-ns.js
 
-import createCssNs from 'css-ns';
+import { createCssNs } from 'css-ns';
 
 export default namespace => createCssNs({
   namespace,
