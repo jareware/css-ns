@@ -52,6 +52,7 @@ function createOptions(raw) {
     prefix:     assertStringOption( 'prefix',    raw.prefix  || ''),                              // e.g. "myapp-"
     include:    assertRegexOption(  'include',   raw.include || /^[a-z]/),                        // assume upper-cased classes are other components
     exclude:    assertRegexOption(  'exclude',   raw.exclude || /^$/),                            // don't exclude anything by default (this regex will never match anything of relevance)
+    escape:     assertStringOption( 'escape',    raw.escape  || '='),                             // escape classes beginning with "="" by default
     self:       assertRegexOption(  'self',      raw.self    || /^this$/),                        // "this" references the current component directly
     glue:       assertStringOption( 'glue',      raw.glue    || '-'),                             // allows e.g. "MyComponent_foo" when set to "_"
     React:      raw.React && assertObjectOption('React', raw.React) || null,                      // passing in a React instance enables the React convenience methods
@@ -103,6 +104,8 @@ function nsString(options, string) {
       return opt.prefix + opt.namespace;
     else if (opt.prefix && cls.substr(0, opt.prefix.length) === opt.prefix) // already prefixed
       return cls; // => don't touch it
+    else if (opt.escape && cls.length >= opt.escape.length && cls.substr(0, opt.escape.length) === opt.escape)
+      return cls.substr(opt.escape.length); // => remove the escape sign
     else if (cls.match(opt.include) && !cls.match(opt.exclude)) // matching non-prefixed, non-namespaced class name
       return opt.prefix + opt.namespace + opt.glue + cls; // => prefix & namespace
     else // something else

@@ -149,6 +149,29 @@ describe('css-ns', function() {
       );
     });
 
+    it('supports escaping', function() {
+      var options = {
+        namespace: 'Foo',
+        escape: '~'
+      };
+      assert.equal(cssNs.nsString(options, '~bar'), 'bar');
+    });
+
+    it('supports an exotic escape string', function() {
+      var options = {
+        namespace: 'Foo',
+        escape: '@]]£20as+d09a+s+fsdkjnf'
+      };
+      assert.equal(cssNs.nsString(options, '@]]£20as+d09a+s+fsdkjnfbar car'), 'bar Foo-car');
+    });
+
+    it('supports escaping with the default option', function() {
+      var options = {
+        namespace: 'Foo'
+      };
+      assert.equal(cssNs.nsString(options, '=bar car'), 'bar Foo-car');
+    });
+
     it('supports a self option', function() {
       var options = {
         namespace: 'Foo',
