@@ -341,7 +341,8 @@ The web-based test suite is available at http://jrw.fi/css-ns/.
 
 1. Bump version number in `package.json`
 1. `$ git commit -m "Version bump for release." && git push`
-1. `$ npm publish`
+1. `$ cp css-ns.{js,d.ts} package.json dist/`
+1. `$ cd dist && npm publish`
 1. Create release on GitHub, e.g. `v1.1.3`
 
 ## Licence
