@@ -112,11 +112,11 @@ Finally, if we were to style this component [using Sass](#use-with-sass), those 
 ```scss
 .MyComponent {
   background: white;
-  
+
   &-isActive {
     background: cyan;
   }
-  
+
   &-submit {
     font-weight: bold;
   }
